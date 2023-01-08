@@ -124,6 +124,27 @@ NOTE: the code examples do not compile; you will need to read them and think abo
 You'll see how to make those exercises compile in the next chapter.
 
 ``` rust,ignore
+fn identity(a: &i32) -> &i32 {
+    a
+}
+
+fn example_1() {
+    let x = 4;
+    let x_ref = identity(&x);
+    assert_eq(*x_ref, 4);
+}
+
+fn example_2() {
+    let mut x_ref: Option<&i32> = None;
+    {
+        let x = 7;
+        x_ref = Some(identity(&x));
+    }
+    assert_eq!(*x_ref.unwrap(), 7);
+}
+```
+
+``` rust,ignore
 fn option_or(opt: Option<&i32>, otherwise: &i32) -> &i32 {
     opt.unwrap_or(otherwise)
 }

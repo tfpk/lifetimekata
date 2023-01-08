@@ -11,7 +11,7 @@ use require_lifetimes::require_lifetimes;
 /// assert_eq!(identity(&x), &x);
 /// ````
 #[require_lifetimes(!)]
-pub fn identity(number: & i32) -> &i32 {
+pub fn identity(number: &i32) -> &i32 {
     number
 }
 

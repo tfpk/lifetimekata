@@ -172,9 +172,7 @@ error to elide lifetimes here -- the user has to give more information!
 
 ## Exercise: Apply These Rules
 
-In this exercise, there are four functions which have no manual lifetimes.
+In this exercise, there are three functions which have no manual lifetimes.
 Your task is to manually follow the lifetime elision rules, and give these
 functions lifetimes.
 
-If you are unable to give them a lifetime, put `#[elision_not_allowed]`
-above the function, and leave it unedited.

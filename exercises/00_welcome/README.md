@@ -104,11 +104,11 @@ is *larger* than the region of code where the variable exists. This indicates
 that there must be part of the time the reference exists where the variable
 has been dropped, and therefore a dangling reference might exist.
 
-We call the region of code where a variable exists a "lifetime". We can
+We call a region of code where a variable exists a "lifetime". We can
 give lifetimes names using the syntax `'name`. So if we call the variable's
 lifetime `'variable`, and the reference's lifetime `'reference`, we can
 then formally say that for any variable that references another variable,
-`'variable` must be longer than `'reference`.
+`'variable` must be larger than `'reference`.
 
 ## So what's this book about then?
 

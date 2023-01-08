@@ -27,21 +27,23 @@ fn some_if_greater<'lifetime1, 'lifetime2>(number: &'lifetime1 i32, greater_than
 
 There are two sections of code that are relevant to lifetimes.
 
- - `fn  my_function<'lifetime1, 'lifetime2>(...)` this is written exactly the same way that generic parameters are.
-   Note that all lifetime parameters must be declared before you declare types.
-   So for a generic function you'd write `fn my_function<'lifetime1, T>(...)`
- - All references are written as `&'lifetime1 i32`. This is the same as a `&i32`, we've just given the compiler
-   more information to understand the lifetimes.
+ - `fn my_function<'lifetime1, 'lifetime2>(...)` this is written exactly the
+   same way that generic parameters are. Note that all lifetime parameters must
+   be declared before you declare types. So for a generic function you'd write
+   `fn my_function<'lifetime1, T>(...)`
+ - All references are written as `&'lifetime1 i32`. This is the same as a
+   `&i32`, we've just given the compiler more information to understand the
+   lifetimes.
 
-What we're doing here is telling the compiler that it needs to find two regions of code:
-`'lifetime1`  and `'lifetime2`. One region of code needs to contain everything that
-lives as long as `'lifetime1`. Another region of code needs to contain everything
-that lives as long as `'lifetime2`. If the compiler is unable to find a region
-that matches that description, that is an error.
+What we're doing here is telling the compiler that it needs to find two regions
+of code: `'lifetime1` and `'lifetime2`. One region of code needs to contain
+everything that lives as long as `'lifetime1`. Another region of code needs to
+contain everything that lives as long as `'lifetime2`. If the compiler is unable
+to find a region that matches that description, that is an error.
 
-It's really important to note that we're not telling the compiler *what*
-the region of code is. We're just telling it that it needs to find such
-a region of code.
+It's really important to note that we're not telling the compiler *what* the
+region of code is. We're just telling it that it needs to find such a region of
+code.
 
 
 # Exercise: Annotate lifetimes
@@ -51,9 +53,10 @@ on some of the examples of the last two chapters.
 
 You will need to:
  - decide how many lifetime parameters are necessary
- - name each of those lifetime parameters, and put them inside `<` angle brackets `>` after the function's name.
+ - name each of those lifetime parameters, and put them inside `<` angle brackets `>` after the function's name. 
  - annotate every reference with the appropriate lifetime
  - check the code compiles
+ - think about what region of code each lifetime could be
  
 You will notice each function has the `#[lifetimes_required(!)]` annotation. You will need
 to leave it there to complete this exercise. This instructs the compiler to throw an

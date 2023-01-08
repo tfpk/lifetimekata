@@ -1,5 +1,20 @@
 use require_lifetimes::require_lifetimes;
 
+/// This function returns the reference given to it.
+///
+/// Make sure it passes this test:
+///
+/// ```rust
+/// use exercise::identity;
+///
+/// let x = 3;
+/// assert_eq!(identity(&x), &x);
+/// ````
+#[require_lifetimes(!)]
+pub fn identity<'a>(number: &'a i32) -> &'a i32 {
+    number
+}
+
 /// Recall that this function returns `Some(&number)` if
 /// number is greater than the other number; otherwise `None`.
 ///

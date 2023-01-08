@@ -1,0 +1,13 @@
+[package]
+name = "solution_05"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "solution_05"
+path = "src/main.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+require_lifetimes = "0.3.0"
