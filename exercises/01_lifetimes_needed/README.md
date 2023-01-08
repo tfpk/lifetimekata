@@ -117,12 +117,46 @@ before we deal with syntax.
 
 Without using any lifetime syntax, answer the following questions for each of the code examples:
 
-1. Which references could be returned by the function?
-2. Under what circumstances (if any) might the function return a dangling reference?
+1. Which inputs are references? Which could the function return?
+2. Which examples could have dangling references?
 
 NOTE: the code examples do not compile; you will need to read them and think about them.
 You'll see how to make those exercises compile in the next chapter.
 
 ``` rust,ignore
+fn option_or(opt: Option<&i32>, otherwise: &i32) -> &i32 {
+    opt.unwrap_or(otherwise)
+}
+
+fn example_1() {
+    let x = 8;
+    let y = 10;
+    let my_number = Some(&x);
+    assert_eq!(&x, option_or(my_number, &y));
+}
+
+fn example_2() {
+    let answer = {
+        let y = 4;
+        option_or(None, &y)
+    };
+    assert_eq!(answer, &4);
+}
+fn example_3() {
+    let y = 4;
+    let answer = {
+        option_or(None, &y)
+    };
+    assert_eq!(answer, &4);
+}
+
+fn example_4() {
+    let y = 4;
+    let answer = {
+    let x = 7;
+        option_or(Some(&x), &y)
+    };
+    assert_eq!(answer, &7);
+}
 ```
 
