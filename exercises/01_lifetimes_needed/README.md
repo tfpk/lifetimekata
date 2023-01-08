@@ -118,7 +118,11 @@ before we deal with syntax.
 Without using any lifetime syntax, answer the following questions for each of the code examples:
 
 1. Which references could be returned by the function?
-2. Are there any inputs where the program might return a dangling reference?
+2. Under what circumstances (if any) might the function return a dangling reference?
 
 NOTE: the code examples do not compile; you will need to read them and think about them.
 You'll see how to make those exercises compile in the next chapter.
+
+``` rust,ignore
+```
+

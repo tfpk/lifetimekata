@@ -116,3 +116,8 @@ There are places where the rust compiler is unable to figure out lifetimes, and
 needs the programmer to explicitly specify this. This book is to help you
 improve at writing explicit lifetimes (things like `&'a str`). And that starts
 with the next chapter!
+
+## Exercise: Complete the Rustlings Exercises on Lifetimes
+
+If you aren't sure you understand the above, before reading on,
+[complete the rustlings exercises about lifetimes](https://github.com/rust-lang/rustlings/tree/main/exercises/lifetimes).
