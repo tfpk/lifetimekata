@@ -1,14 +1,18 @@
 ## Okay, so what do we do?
 
-The problem we've seen here is that when a function might output
-a reference with a specific lifetime, it needs to know what it's
-lifetime was (and therefore, from which inputs that lifetime came).
-Once the compiler knows that, it is able to check for dangling references.
+What we can see here is that dangling references aren't usually
+caused by the function, but by how we call that function.
+What we want to do is restrict how the user can call a function,
+so that they are only allowed to call it if the compiler can
+ensure that the lifetimes are valid.
 
-So, let's tell the compiler that certain references in the function signature
-must both be valid over the same region of code. In other words,
-they must share a lifetime.
+The compiler can only decide if the function is correct if it
+knows how the lifetimes of it's inputs and outputs interact.
+So, we need to tell the compiler when lifetimes of inputs and
+outputs need to be the same.
 
+What we can do is tell the computer "my function works for any lifetimes,
+as long as the lifetimes of these inputs/outputs are the same".
 Let's take a look at the syntax of this:
 
 ```rust
@@ -25,31 +29,26 @@ fn some_if_greater<'lifetime1, 'lifetime2>(number: &'lifetime1 i32, greater_than
 # }
 ```
 
-There are two sections of code that are relevant to lifetimes.
+Let's walk through what this does:
 
- - `fn my_function<'lifetime1, 'lifetime2>(...)` this is written exactly the
-   same way that generic parameters are. Note that all lifetime parameters must
-   be declared before you declare types. So for a generic function you'd write
-   `fn my_function<'lifetime1, T>(...)`
- - All references are written as `&'lifetime1 i32`. This is the same as a
-   `&i32`, we've just given the compiler more information to understand the
-   lifetimes.
+ - `fn my_function<'lifetime1, 'lifetime2>(...)`: what we're doing here
+   is choosing some names for the lifetimes our program requires.
+ - `number: &'lifetime1 i32`: this is us telling the compiler that
+   this reference must live for some region of code called `'lifetime1`.
+ - `greater_than: &'lifetime2 i32`: this is us telling the compiler that
+   this reference must live for some region of code called `'lifetime2`.
+   This means that the lifetimes of `greater_than` and `number` don't
+   have to relate at all.
+ - `-> Option<&'lifetime1 i32>`: this is where lifetimes are important.
+   what we're saying is that `number` and our return value must be
+   valid for exactly the same region of code. 
 
-What we're doing here is telling the compiler that it needs to find two regions
-of code: `'lifetime1` and `'lifetime2`. One region of code needs to contain
-everything that lives as long as `'lifetime1`. Another region of code needs to
-contain everything that lives as long as `'lifetime2`. If the compiler is unable
-to find a region that matches that description, that is an error.
-
-It's really important to note that we're not telling the compiler *what* the
-region of code is. We're just telling it that it needs to find such a region of
-code.
-
+So, what we've done is told the compiler that our function can only be called
+if `number` and the return are valid in the same region of code.
 
 # Exercise: Annotate lifetimes
 
-Just to get some initial practice, the exercise in this section is to annotate lifetimes
-on some of the examples of the last two chapters.
+Just to get some initial practice, the exercise in this section is to annotate lifetimes on some of the examples of the last two chapters.
 
 You will need to:
  - decide how many lifetime parameters are necessary

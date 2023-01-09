@@ -1,12 +1,14 @@
 # Why Lifetimes Are Mostly Never Used
 
-In the last chapter, we saw why we needed lifetimes. We saw that the compiler was unable
-to automatically tell which inputs to the function might be used to produce references,
-and therefore it wasn't sure how long the outputs of functions needed to live for.
+In the last chapter, we saw why we needed lifetimes. We saw that the compiler
+was unable to automatically tell how references in the arguments or return
+values might relate to eachother. This is why we needed to explicitly promise
+the compiler that the references related to eachother.
 
-This said, you've probably written a function in Rust that needed a reference (likely a `&str`).
-Why didn't you have to annotate lifetimes then? There are some common patterns in rust that
-make it obvious to the compiler what the lifetimes should be. Let's explore some of them:
+This said, you've probably written a function in Rust that needed a reference
+(likely a `&str`), without writing lifetimes. Why didn't you have to annotate
+lifetimes then? There are some common patterns in rust that make it obvious to
+the compiler what the lifetimes should be. Let's explore some of them:
 
 ## Example 1: No Output References
 
@@ -38,11 +40,12 @@ fn identity(a: &i32) -> &i32 {
 # }
 ```
 
-Remember that it (generally) isn't possible to create a reference and pass it out of a
+Remember that it (generally
+{{footnote: this is possible with static types, like string literals, but we'll cover those later}}
+) isn't possible to create a reference and pass it out of a
 function if it wasn't given to you. If you're giving it away, but you created it, who
 owns the underlying data?
 
-(footnote: this is possible with static types, like string literals, but we'll cover those later)
 
 For this reason, if you only have one reference in your parameters, the only reference you
 could return is that one -- so the lifetime of your parameter has to be the same as
@@ -63,7 +66,7 @@ are those in the return type of the function.
 The two rules that we'll learn in this chapter are:
 
 1. Each place that an input lifetime is left out (a.k.a 'elided') is filled in with it's own lifetime.
-2. If there's only one lifetime on all the input references, that lifetime is assigned to all output lifetimes.
+2. If there's exactly one lifetime on all the input references, that lifetime is assigned to all output lifetimes.
 
 Let's see how those rules affect the above two examples, and an example from the last chapter:
 

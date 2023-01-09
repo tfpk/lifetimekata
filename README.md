@@ -15,23 +15,20 @@ Clone this repository:
 $ git clone https://www.github.com/tfpk/lifetimekata/
 ```
 
-Build the main binary provided with this repo:
+Most exercises are run in two steps:
 
 ``` sh
-$ cargo build --bin lifetimekata
+$ cargo build --bin ex04
 ```
 
-You can find the first kata (`my_first_macro`) inside `exercises/01_my_first_macro`.
-Read the `README.md` file and get started by editing the `main.rs` file.
-
-To compare your expanded code to the "goal", use the `test` subcommand:
+And then either:
 
 ``` sh
-$ cargo run -- test 01_my_first_macro
+$ cargo test --bin ex04
 ```
 
-You can run your own code as follows:
+or:
 
 ``` sh
-$ cargo run --bin 01_my_first_macro
+$ cargo run --bin ex04
 ```

@@ -6,18 +6,21 @@
 If you've been using rust for a while, you've likely already encountered
 references. For every type `T`, there are two types of references to it:
 
- - `&T`: A shared reference (often called a shared borrow) of `T`.
+ - `&T`: A shared reference (often called a shared borrow) of `T`. You can have
+   as many of these as you'd like, but they do not allow you to modify the 
+   data they refer to.
  - `&mut T`: A mutable reference (often called an exclusive borrow) of `T`.
+   You can only have one of these at a time, but they allow you to modify
+   the data they refer to.
 
-References are conceptually simple -- they let you read (and maybe modify) the
-type `T` without owning it. This makes it easy to call a function on data
+References make it easy to call a function on data
 without needing to copy that data.
 
-The powerful thing about references is that Rust guarantees that if you have a
-reference to something, the thing that you are referring to has not been dropped.
-A reference to something that no longer exists is called a "dangling reference",
-and Rust guarantees you will never have one. Therefore, this example will not
-compile:
+The powerful thing about Rust's references is that they are guaranteed to always
+refer to something that still exists (i.e. has not been dropped/freed/gone out
+of scope). A reference to something that no longer exists is called a "dangling
+reference", and Rust guarantees you will never have one. Therefore, this example
+will not compile:
 
 ```rust,ignore
 fn main() {

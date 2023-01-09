@@ -8,7 +8,7 @@ This is because if a struct contains a reference, the user needs
 to clarify how long it lasts for.
 
 Imagine we wanted to split a `&str` in two, and create a
-struct with a `before` and `after` field?
+struct with a `start` and `end` field?
 
 Well, we could write a function like this:
 
@@ -19,12 +19,12 @@ struct SplitStr {
 }
 
 fn split<'text, 'delim>(text: &'text str, delimiter: &'delim str) -> Option<SplitStr> {
-    let (before, after) = text.split_once(delimiter)?;
+    let (start, end) = text.split_once(delimiter)?;
     
-    SplitStr {
-        before,
-        after
-    }
+    Some(SplitStr {
+        start,
+        end
+    })
 }
 
 # fn main() {}
@@ -44,12 +44,12 @@ What if we called the function like this:
 # }
 # 
 # fn split<'text, 'delim>(text: &'text str, delimiter: &'delim str) -> Option<SplitStr> {
-#     let (before, after) = text.split_once(delimiter)?;
+#     let (start, end) = text.split_once(delimiter)?;
 #     
-#     SplitStr {
-#         before,
-#         after
-#     }
+#     Some(SplitStr {
+#         start,
+#         end
+#     })
 # }
 
 fn main() {
@@ -69,19 +69,19 @@ since they both pointed to `my_string`; but that only existed inside the curly b
 So, Rust forces us to provide a lifetime for all references inside a struct.
 Here's how we'd fix our code:
 
-``` rust,ignore
+``` rust
 struct SplitStr<'str_lifetime> {
     start: &'str_lifetime str,
     end: &'str_lifetime str
 }
 
 fn split<'text, 'delim>(text: &'text str, delimiter: &'delim str) -> Option<SplitStr<'text>> {
-    let (before, after) = text.split_once(delimiter)?;
+    let (start, end) = text.split_once(delimiter)?;
     
-    SplitStr {
-        before,
-        after
-    }
+    Some(SplitStr {
+        start,
+        end
+    })
 }
 
 # fn main() {}
@@ -120,14 +120,17 @@ words to the second sentence are `"ski"` and `"snowboard"`.
 If you said that the two sentences had to share a lifetime, you would
 be forcing the user to ensure that the two sentences came from the same
 place, and therefore had the same lifetime. But what if one came from a file that
-was open for the whole running of the program, but the second was scanned in?
+was open for the whole running of the program, but the second was scanned in
+inside a loop?
 
 In that case, the compiler would insist that the scanned in value was saved for
 the whole of the program -- very inefficient.
 
 ## Exercise: Two Lifetimes on a Struct
 
-In this exercise, we will be building a small program which finds the unique
-words between two strings.
+In this exercise, we will be making a small program which finds the unique
+words between two strings compile.
 
-Our goal is to 
+Our goal is to return a struct that contains all the unique words from the
+first string, and all the unique words from the second string. They should
+have seperate lifetimes.

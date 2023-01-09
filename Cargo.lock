@@ -10,6 +10,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "exercise_02"
+version = "0.1.0"
+dependencies = [
+ "require_lifetimes",
+]
+
+[[package]]
+name = "exercise_05"
+version = "0.1.0"
+dependencies = [
+ "require_lifetimes",
+]
+
+[[package]]
+name = "exercise_08"
+version = "0.1.0"
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.49"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -37,6 +55,31 @@ dependencies = [
  "quote",
  "syn",
 ]
+
+[[package]]
+name = "solution"
+version = "0.1.0"
+dependencies = [
+ "require_lifetimes",
+]
+
+[[package]]
+name = "solution_04"
+version = "0.1.0"
+dependencies = [
+ "require_lifetimes",
+]
+
+[[package]]
+name = "solution_05"
+version = "0.1.0"
+dependencies = [
+ "require_lifetimes",
+]
+
+[[package]]
+name = "solutions_08"
+version = "0.1.0"
 
 [[package]]
 name = "syn"

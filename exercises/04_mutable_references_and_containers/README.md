@@ -17,11 +17,9 @@ We're not returning anything; so it's all good, right?
 
 Unfortunately not. The reference `value` actually needs to
 live for the same time as the contents of the vector. If they didn't,
-the vector might contain an invalid reference.
+the vector might contain an invalid reference. We can use lifetimes
+to ensure that the two references live for the same amount of time:
 
-So, in this case, we need to tell the compiler that `value` will
-live at least as long as the contents of the vector. We can do this
-with lifetimes.
 
 ``` rust
 fn insert_value<'vec_lifetime, 'contents_lifetime>(my_vec: &'vec_lifetime mut Vec<&'contents_lifetime i32>, value: &'contents_lifetime i32) {
@@ -32,14 +30,15 @@ fn main(){
     let val1 = 1;
     let val2 = 2;
     
-    insert_value(&my_vec, &val1);
-    insert_value(&my_vec, &val2);
+    insert_value(&mut my_vec, &val1);
+    insert_value(&mut my_vec, &val2);
     
     println!("{my_vec:?}");
 }
 ```
 
 This signature indicates that there are two lifetimes:
+
  - `'vec_lifetime`: The vector we've passed the function will need to live
    for a certain period of time.
  - `'contents_lifetime`: The contents of the vector need to live for a certain
@@ -47,7 +46,7 @@ This signature indicates that there are two lifetimes:
    for just as long as the contents of the vector. If they didn't, you would
    end up with a vector that contains an invalid reference.
 
-## Weird Behaviour from Lifetime Bounds
+## Do We Even Need Two Lifetimes?
 
 You might wonder what happens if we don't provide two lifetimes. Does just
 one lifetime work?
@@ -69,7 +68,7 @@ fn main(){
 }
 ```
 
-No, it doesn't. We get two errors. Let's look a the first one:
+No, it doesn't. We get two errors. Let's look at the first one:
 
 ```
 error[E0499]: cannot borrow `my_vec` as mutable more than once at a time
@@ -127,8 +126,9 @@ Whereas `&mut my_vec` only needs to last for the duration of `insert_value`.
 # }
 ```
 
-But, we've told the compiler that it needs to find ONE region of code in which
-both `&val1` and `&mut my_vec` are valid. And the compiler can do it!
+But, we've told the compiler that it needs the borrows of both `&val1` and
+`&mut my_vec` to share the same lifetime. So the compiler extends the borrow
+of `&mut my_vec` to ensure they do share a lifetime:
 It sees that if it let `&mut my_vec` live as long as `&val1`, it would
 have that single region of code:
 
@@ -191,7 +191,7 @@ fn main(){
 
 First, let's look at the other error we got in the last section:
 
-``` rust,no_run
+```
 error[E0502]: cannot borrow `my_vec` as immutable because it is also borrowed as mutable
   --> /tmp/rust.rs:13:16
    |
