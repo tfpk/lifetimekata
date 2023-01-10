@@ -5,7 +5,7 @@ use require_lifetimes::require_lifetimes;
 /// Make sure it passes this test:
 ///
 /// ```rust
-/// use exercise::identity;
+/// use ex02::identity;
 ///
 /// let x = 3;
 /// assert_eq!(identity(&x), &x);
@@ -27,7 +27,7 @@ pub fn identity(number: &i32) -> &i32 {
 /// This example will always work:
 ///
 /// ```rust
-/// use exercise::split;
+/// use ex02::split;
 /// let text = String::from("this is a test");
 /// let delimiter = String::from(" ");
 /// let splitted = split(&text, &delimiter);
@@ -37,7 +37,7 @@ pub fn identity(number: &i32) -> &i32 {
 /// But this example will only work if the lifetimes are correct:
 ///
 /// ```rust
-/// use exercise::split;
+/// use ex02::split;
 /// let text = String::from("this is a test");
 /// let splitted = {
 ///     let delimiter = String::from(" ");
@@ -73,7 +73,7 @@ pub fn split(text: &str, delimiter: &str) -> Vec<&str> {
 /// The following test case will likely always work:
 ///
 /// ```rust
-/// use exercise::only_if_greater_hard;
+/// use ex02::only_if_greater_hard;
 /// let num = 4;
 /// let otherwise = -1;
 /// {
@@ -88,7 +88,7 @@ pub fn split(text: &str, delimiter: &str) -> Vec<&str> {
 /// the lifetimes correctly:
 ///
 /// ```rust
-/// use exercise::only_if_greater_hard;
+/// use ex02::only_if_greater_hard;
 /// let num = 10;
 /// let otherwise = -1;
 /// let answer = {
@@ -109,7 +109,7 @@ pub fn split(text: &str, delimiter: &str) -> Vec<&str> {
 /// And this test case should never compile -- can you see why?
 ///
 /// ```rust,compile_fail
-/// use exercise::only_if_greater_hard;
+/// use ex02::only_if_greater_hard;
 /// let greater_than = 7;
 /// let otherwise = -1;
 /// let answer = {

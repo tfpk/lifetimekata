@@ -1,4 +1,4 @@
-# Special Lifetimes
+# Special Lifetimes and Bounds
 
 There are two special lifetimes in Rust. It's worth discussing them both:
 
@@ -135,6 +135,35 @@ is now [this article](https://yegeun542.github.io/rust-edition-guide-ko/rust-201
 
 https://www.reddit.com/r/rust/comments/w06q7e/why_is_sometimes_used/
 
+# Lifetime Bounds
+
+Lifetime bounds are not widely used, so we don't devote a large section of these exercises to them.
+You can probably skip this section unless you really want to know the details.
+
+In short, they allow you to specify that one lifetime should outlive another. To specify one, use a where clause, such as 
+`where 'a: 'b`.
+
+To quote the Rust Reference: 
+
+> Lifetime bounds can be applied to types or to other lifetimes.
+> The bound `'a: 'b` is usually read as `'a` *outlives* `'b`.
+> `'a: 'b` means that `'a` lasts at least as long as `'b`, so a reference `&'a ()` is valid whenever `&'b ()` is valid.
+
+> ```rust,ignore
+> fn f<'a, 'b>(x: &'a i32, mut y: &'b i32) where 'a: 'b {
+>     y = x;                      // &'a i32 is a subtype of &'b i32 because 'a: 'b
+>     let r: &'b &'a i32 = &&0;   // &'b &'a i32 is well formed because 'a: 'b
+> }
+> ```
+
+> `T: 'a` means that all lifetime parameters of `T` outlive `'a`.
+> For example, if `'a` is an unconstrained lifetime parameter, then `i32: 'static` and `&'static str: 'a` are satisfied, but `Vec<&'a ()>: 'static` is not.
+
+
 # Exercise
 
-Use special lifetimes to remove all the lifetimes in this example.
+You have been given code which contains many uses of the lifetimes `'a` and `'b'`.
+All of these lifetimes can be replaced with either `'_` or `'static`.
+
+Your task is to replace every occurance of the lifetimes `'a` and `'b` with either
+`'_` or `'static`, and to ensure your code still compiles.

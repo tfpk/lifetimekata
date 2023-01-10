@@ -1,15 +1,27 @@
-# Further Reading
+# Further Reading in the Rust Reference
 
-The best source of information about lifetimes is the Rust reference.
+The best sources of information about lifetimes are the Rust Reference and
+Rustinomicon. If you require a really advanced knowledge of lifetimes to
+complete a project, the reference will contain that knowledge. Most times,
+however, if you feel you need to understand something complex about lifetimes,
+you may find that there is a simpler alternative.
 
  - [The Rust Reference (Lifetime Elision)](https://doc.rust-lang.org/reference/lifetime-elision.html)
  - [The Rust Reference (In General)](https://doc.rust-lang.org/reference/)
+ - [The Rustinomicon (Lifetimes)](https://doc.rust-lang.org/nomicon/lifetimes.html)
 
-## Variance
+## Variance and Subtyping
 
-once you're an expert, read up on variance.
+This guide does not cover the topic of "variance" at all, which is how lifetimes can be substituted for
+one-another. Variance, while theoretically important, is not useful in a day-to-day understanding
+of lifetimes, and so it was not included in the book.
+
+You can read more about it in [the Rustinomicon (subtyping)](https://doc.rust-lang.org/nomicon/subtyping.html).
 
 ## Brain Teaser 1: Why doesn't this program work:
+
+If you're interested in working through a really difficult exercise to test
+your understanding of lifetimes and generics, the following exercise may be interesting.
 
 This should be another way of implementing the code in exercise 5.
 Unfortunately, it doesn't work. This took the author of this book
@@ -57,4 +69,4 @@ fn main() {
 }
 ```
 
-See https://github.com/rust-lang/rust/issues/73788 for more info.
+For more information about this issue, read [this rust issue](https://github.com/rust-lang/rust/issues/73788).

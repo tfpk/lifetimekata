@@ -46,7 +46,6 @@ Remember that it (generally
 function if it wasn't given to you. If you're giving it away, but you created it, who
 owns the underlying data?
 
-
 For this reason, if you only have one reference in your parameters, the only reference you
 could return is that one -- so the lifetime of your parameter has to be the same as
 the reference you return.
@@ -66,7 +65,7 @@ are those in the return type of the function.
 The two rules that we'll learn in this chapter are:
 
 1. Each place that an input lifetime is left out (a.k.a 'elided') is filled in with it's own lifetime.
-2. If there's exactly one lifetime on all the input references, that lifetime is assigned to all output lifetimes.
+2. If there's exactly one lifetime on all the input references, that lifetime is assigned to *every* output lifetime.
 
 Let's see how those rules affect the above two examples, and an example from the last chapter:
 

@@ -66,7 +66,7 @@ fn main() {
 Well, the references inside the `SplitStr` struct are now dangling,
 since they both pointed to `my_string`; but that only existed inside the curly brackets.
 
-So, Rust forces us to provide a lifetime for all references inside a struct.
+So, Rust forces us to specify the lifetime of all references inside a struct.
 Here's how we'd fix our code:
 
 ``` rust
@@ -87,12 +87,13 @@ fn split<'text, 'delim>(text: &'text str, delimiter: &'delim str) -> Option<Spli
 # fn main() {}
 ```
 
-Now, the Rust compiler knows how long references inside the struct should last -
-they should last for the same amount of time as `'text`.
+Now, when we return an `Option<SplitStr<'text>>` the compiler knows that references inside the struct
+must all last for the same lifetime as `'text`. If we try to return a `SplitStr` where the references
+can't last for `'text`, that will be a compiler error.
 
 ## A Note on Enums
 
-References work exactly the same way in enums as they do in Structs.
+References work exactly the same way in enums as they do in structs.
 We don't go into detail on them here because they are interchangeable.
 
 ``` rust
@@ -124,7 +125,7 @@ was open for the whole running of the program, but the second was scanned in
 inside a loop?
 
 In that case, the compiler would insist that the scanned in value was saved for
-the whole of the program -- very inefficient.
+the whole of the program, which would not be ergonomic.
 
 ## Exercise: Two Lifetimes on a Struct
 

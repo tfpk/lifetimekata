@@ -5,7 +5,7 @@ use require_lifetimes::require_lifetimes;
 /// Make sure it passes this test:
 ///
 /// ```rust
-/// use exercise::identity;
+/// use soln02::identity;
 ///
 /// let x = 3;
 /// assert_eq!(identity(&x), &x);
@@ -23,7 +23,7 @@ pub fn identity<'a>(number: &'a i32) -> &'a i32 {
 ///
 /// The following test case will likely always work:
 /// ```rust
-/// use exercise::only_if_greater;
+/// use soln02::only_if_greater;
 /// let num = 10;
 /// {
 ///     let greater_than = 7;
@@ -35,7 +35,7 @@ pub fn identity<'a>(number: &'a i32) -> &'a i32 {
 /// lifetimes correctly:
 ///
 /// ```rust
-/// use exercise::only_if_greater;
+/// use soln02::only_if_greater;
 /// let num = 4;
 /// let answer = {
 ///     let greater_than = 7;
@@ -65,7 +65,7 @@ pub fn only_if_greater<'a, 'b>(number: &'a i32, greater_than: &'b i32) -> Option
 /// This example will always work:
 ///
 /// ```rust
-/// use exercise::split;
+/// use soln02::split;
 /// let text = String::from("this is a test");
 /// let delimiter = String::from(" ");
 /// let splitted = split(&text, &delimiter);
@@ -75,7 +75,7 @@ pub fn only_if_greater<'a, 'b>(number: &'a i32, greater_than: &'b i32) -> Option
 /// But this example will only work if the lifetimes are correct:
 ///
 /// ```rust
-/// use exercise::split;
+/// use soln02::split;
 /// let text = String::from("this is a test");
 /// let splitted = {
 ///     let delimiter = String::from(" ");
@@ -111,7 +111,7 @@ pub fn split<'a, 'b>(text: &'a str, delimiter: &'b str) -> Vec<&'a str> {
 /// The following test case will likely always work:
 ///
 /// ```rust
-/// use exercise::only_if_greater_hard;
+/// use soln02::only_if_greater_hard;
 /// let num = 4;
 /// let otherwise = -1;
 /// {
@@ -126,7 +126,7 @@ pub fn split<'a, 'b>(text: &'a str, delimiter: &'b str) -> Vec<&'a str> {
 /// the lifetimes correctly:
 ///
 /// ```rust
-/// use exercise::only_if_greater_hard;
+/// use soln02::only_if_greater_hard;
 /// let num = 10;
 /// let otherwise = -1;
 /// let answer = {
@@ -147,7 +147,7 @@ pub fn split<'a, 'b>(text: &'a str, delimiter: &'b str) -> Vec<&'a str> {
 /// And this test case should never compile -- can you see why?
 ///
 /// ```rust,compile_fail
-/// use exercise::only_if_greater_hard;
+/// use soln02::only_if_greater_hard;
 /// let greater_than = 7;
 /// let otherwise = -1;
 /// let answer = {

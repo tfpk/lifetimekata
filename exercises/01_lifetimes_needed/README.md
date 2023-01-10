@@ -121,19 +121,26 @@ Without using any lifetime syntax, answer the following questions for each of th
 2. Which examples could have dangling references?
 
 NOTE: the code examples do not compile; you will need to read them and think about them.
-You'll see how to make those exercises compile in the next chapter.
+
+Once you've decided your answers, the "eyeball" button in the top-right hand
+corner of the code block will reveal the answers.
 
 ``` rust,ignore
+
+# // a is the only input reference.
+# // the only thing the function can return is a
 fn identity(a: &i32) -> &i32 {
     a
 }
 
+# // This does not have any dangling references.
 fn example_1() {
     let x = 4;
     let x_ref = identity(&x);
     assert_eq(*x_ref, 4);
 }
 
+# // This is always going to cause a dangling reference.
 fn example_2() {
     let mut x_ref: Option<&i32> = None;
     {
@@ -145,10 +152,13 @@ fn example_2() {
 ```
 
 ``` rust,ignore
+# // the contents of `opt` and `otherwise` are both references
+# // either of them could be returned.
 fn option_or(opt: Option<&i32>, otherwise: &i32) -> &i32 {
     opt.unwrap_or(otherwise)
 }
 
+# // No possibility for a dangling reference here.
 fn example_1() {
     let x = 8;
     let y = 10;
@@ -156,6 +166,7 @@ fn example_1() {
     assert_eq!(&x, option_or(my_number, &y));
 }
 
+# // This is always a dangling reference.
 fn example_2() {
     let answer = {
         let y = 4;
@@ -163,6 +174,8 @@ fn example_2() {
     };
     assert_eq!(answer, &4);
 }
+
+# // This is never a dangling reference.
 fn example_3() {
     let y = 4;
     let answer = {
@@ -171,10 +184,11 @@ fn example_3() {
     assert_eq!(answer, &4);
 }
 
+# // This is always a dangling refernece.
 fn example_4() {
     let y = 4;
     let answer = {
-    let x = 7;
+        let x = 7;
         option_or(Some(&x), &y)
     };
     assert_eq!(answer, &7);

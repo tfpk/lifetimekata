@@ -1,0 +1,58 @@
+[X] Structure actual projects nicely, decide on consistent naming.
+ - 'ex0N', 'soln0N'
+[ ] Decide if there's anything the actual binary should do.
+ - It should do diffing, and have a 'test N' function.
+[ ] Release project, get the action for mdbook working.
+
+* Exercise 0: Revision
+
+Copy      [X]
+Exercises [X]
+
+* Exercise 1: Lifetimes Needed
+
+Copy      [X]
+Exercises [X]
+
+* Exercise 2: Lifetimes Explained
+
+Copy      [X]
+Exercises [X]
+
+* Exercise 3: Lifetime Elision
+
+Copy      [X]
+Exercises [ ] gnarly macro required
+
+* Exercise 4: Mutable References and Containers
+
+Copy      [X]
+Exercises [X]
+
+* Exericse 5: Lifetimes on Types
+
+Copy      [X]
+Exercises [X] (confirm I like the exercise here)
+
+* Exericse 6: Lifetimes on Impls
+
+Copy      [X]
+Exercises [X] (confirm I like the exercise here)
+
+* Exericse 7: Special Lifetimes
+
+Copy      [X]
+exercises [X]
+
+* Exericse 8: Finale
+
+Copy      [X]
+exercises [ ]
+
+* Exericse 9: Further Reading
+
+Copy      [X]
+
+* Exericse 10: Footnote
+
+Copy      [X]
