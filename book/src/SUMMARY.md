@@ -10,5 +10,5 @@
 - [Chapter 6: Lifetimes on Impls](./chapter_6.md)
 - [Chapter 7: Special Lifetimes](./chapter_7.md)
 - [Chapter 8: Finale](./chapter_8.md)
-- [Chapter 9: Further Reading](./chapter_8.md)
-- [Chapter 10: Footnote](./chapter_11.md)
+- [Chapter 9: Further Reading](./chapter_9.md)
+- [Chapter 10: Footnote on Trait Lifetime Bounds](./chapter_10.md)
