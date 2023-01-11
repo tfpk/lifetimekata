@@ -13,13 +13,32 @@ fn insert_value(my_vec: &mut Vec<&i32>, value: &i32) {
 }
 ```
 
-We're not returning anything; so it's all good, right?
+We're not returning anything; so lifetimes don't matter, right?
 
-Unfortunately not. The reference `value` actually needs to
+Unfortunately, lifetimes are still important. The reference `value` actually needs to
 live for the same time as the contents of the vector. If they didn't,
-the vector might contain an invalid reference. We can use lifetimes
-to ensure that the two references live for the same amount of time:
+the vector might contain an invalid reference. For example, what would happen
+in this scenario?
 
+``` rust,ignore
+fn insert_value(my_vec: &mut Vec<&i32>, value: &i32) {
+    my_vec.push(value);
+}
+
+fn main() {
+    let x = 1;
+    let my_vec = vec![&x];
+    {
+        let y = 2;
+        insert_value(&mut my_vec, &y);
+    }
+    println!("{my_vec:?}");
+}
+```
+
+The reference to `y` in the above example is dangling when we try to print the vector!
+
+We can use lifetimes to ensure that the two references live for the same amount of time:
 
 ``` rust
 fn insert_value<'vec_lifetime, 'contents_lifetime>(my_vec: &'vec_lifetime mut Vec<&'contents_lifetime i32>, value: &'contents_lifetime i32) {

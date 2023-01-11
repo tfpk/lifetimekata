@@ -123,17 +123,9 @@ _ | fn make_wrapper(string: &str) -> StrWrap<'_> {
 By following the hint, it becomes clearer that `StrWrap` *does* contain a reference,
 but that the compiler should just figure it out.
 
-# Lifetimes on Trait Objects
+## Lifetimes on Trait Objects
 
 See `12_lifetimes_on_trait_objects` for the gory details.
-
-# Notes on Bad Information
-
-The Rust Edition Guide previously contained a section
-about anonymous lifetimes. The most popular google result
-is now [this article](https://yegeun542.github.io/rust-edition-guide-ko/rust-2018/ownership-and-lifetimes/the-anonymous-lifetime.html) but I recommend disregarding it.
-
-https://www.reddit.com/r/rust/comments/w06q7e/why_is_sometimes_used/
 
 # Lifetime Bounds
 
@@ -167,3 +159,9 @@ All of these lifetimes can be replaced with either `'_` or `'static`.
 
 Your task is to replace every occurance of the lifetimes `'a` and `'b` with either
 `'_` or `'static`, and to ensure your code still compiles.
+
+### Footnote on Out of Date Information
+  * [ ] 
+The Rust Edition Guide previously contained a section
+about anonymous lifetimes. The most popular google result
+is now [this article](https://yegeun542.github.io/rust-edition-guide-ko/rust-2018/ownership-and-lifetimes/the-anonymous-lifetime.html) but I recommend disregarding it, as it is out of date information.

@@ -152,6 +152,6 @@ signature like `fn get_bool<'elided>(b: &'elided bool) -> Box<dyn Bool +
 lifetime is: `fn get_bool<'elided>(b: &'elided bool) -> Box<dyn Bool +
 'static>`. That `'static` bound is incorrect.
 
-Therefore, we need the `'_` bound (as rust tells us) to inform Rust that it
+Therefore, we need the `'_` bound (as this error message tells us) to inform Rust that it
 should use the normal lifetime elision rules; rather than the special trait
 object rules.

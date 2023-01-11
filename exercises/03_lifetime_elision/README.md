@@ -1,9 +1,9 @@
-# Why Lifetimes Are Mostly Never Used
+# Why Lifetime Annotations Are Mostly Never Used
 
 In the last chapter, we saw why we needed lifetimes. We saw that the compiler
 was unable to automatically tell how references in the arguments or return
-values might relate to eachother. This is why we needed to explicitly promise
-the compiler that the references related to eachother.
+values might relate to eachother. This is why we needed to tell the compiler
+that the references related to eachother.
 
 This said, you've probably written a function in Rust that needed a reference
 (likely a `&str`), without writing lifetimes. Why didn't you have to annotate
@@ -22,7 +22,7 @@ fn add(a: &i32, b: &i32) -> i32 {
 # }
 ```
 
-The lifetimes of `a` and `b` in this function don't need to relate to eachother. Assuming there's only one thread,
+The lifetimes of `a` and `b` in this function don't need to relate to each other. Assuming there's only one thread,
 and assuming safe code, there's no way that the variable they are referencing could possibly be dropped during the
 function, and after the function, they can live for as long as they like.
 
@@ -40,11 +40,13 @@ fn identity(a: &i32) -> &i32 {
 # }
 ```
 
-Remember that it (generally
+It's important to note that it (generally
 {{footnote: this is possible with static types, like string literals, but we'll cover those later}}
 ) isn't possible to create a reference and pass it out of a
-function if it wasn't given to you. If you're giving it away, but you created it, who
-owns the underlying data?
+function if it wasn't given to you. This is because a reference must refer
+to something you own. Anything you own is dropped at the end of your function.
+Therefore, anything you own can't be referenced; and the only way you can return a reference
+is if you were passed a reference.
 
 For this reason, if you only have one reference in your parameters, the only reference you
 could return is that one -- so the lifetime of your parameter has to be the same as
@@ -58,8 +60,8 @@ ended up with confusing rules.
 
 Instead, the Rust project has settled on a procedure the compiler will follow to try and guess lifetimes.
 
-The compiler first splits all the references in a function signature into two types: 'input'
-references are those in the parameters of the function (i.e. it's arguments). 'output' references
+The compiler first splits all the references in a function signature into two types: 'input' and 'output'.
+'Input' references are those in the parameters of the function (i.e. it's arguments). 'Output' references
 are those in the return type of the function.
 
 The two rules that we'll learn in this chapter are:
@@ -124,7 +126,7 @@ fn identity<'elided1>(a: &'elided1 i32) -> &i32 {
 # }
 ```
 
-And there is only one output lifetime; but all the input lifetimes share the same lifetime (`'elided1`);
+There is only one output lifetime; and all the input lifetimes share the same lifetime (`'elided1`);
 therefore we can allocate all output lifetimes that lifetime:
 
 ``` rust
@@ -174,7 +176,10 @@ error to elide lifetimes here -- the user has to give more information!
 
 ## Exercise: Apply These Rules
 
-In this exercise, there are three functions which have no manual lifetimes.
+In this exercise, there are four functions which are missing some lifetime annotations.
 Your task is to manually follow the lifetime elision rules, and give these
-functions lifetimes.
+functions lifetimes in the same way that the compiler would.
+
+In a future release of lifetimekata, these will be checked automatically.
+For now, when you're done, compare your answer to the solutions.
 

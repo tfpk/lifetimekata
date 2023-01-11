@@ -1,11 +1,11 @@
-# What are Manual Lifetimes?
+# What are Lifetime Annotations?
 
-In the last section, we discussed the concept of lifetimes as they apply to variables. In all those examples,
+In the last section, we discussed the concept of lifetimes within a single function. In all those examples,
 it was clear what region of code of a variable or reference existed in, based the on the curly brackets.
-Manual lifetimes are used to help the compiler understand what's going on when it can't rely on scope
+Lifetime Annotations are used to help the compiler understand what's going on when it can't rely on scope
 brackets (i.e. across function boundaries; and within structs and enums).
 
-A good place to understand manual lifetime parameters is to start by
+A good place to understand lifetime annotations is to start by
 understanding why we actually need them. Lets work through some examples to see
 why they exist:
 
@@ -109,7 +109,7 @@ So you might reasonably expect that the compiler could infer lifetimes automatic
 It's possible that in simple cases it could. But your compiler might decide that it can't infer
 lifetimes. Or it could succeed in inferring them... after 6 months.
 
-So, the compiler needs more information. That information is provided by manual lifetimes.
+So, the compiler needs more information. That information is provided by lifetime annotations.
 Before we discuss them in detail, here is an exercise that will hopefully re-inforce the concepts,
 before we deal with syntax.
 

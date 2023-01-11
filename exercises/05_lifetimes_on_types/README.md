@@ -129,9 +129,10 @@ the whole of the program, which would not be ergonomic.
 
 ## Exercise: Two Lifetimes on a Struct
 
-In this exercise, we will be making a small program which finds the unique
-words between two strings compile.
+In this exercise, we will be modifying a small program which finds the unique
+words between two strings. At the moment, it does not have any lifetime
+annotations, and therefore does not compile.
 
 Our goal is to return a struct that contains all the unique words from the
 first string, and all the unique words from the second string. They should
-have seperate lifetimes.
+have separate lifetimes.

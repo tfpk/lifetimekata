@@ -35,18 +35,19 @@ fn main() {
 ```
 
 Most modern languages (Python, Java, etc.) avoid the problem of dangling references
-by only dropping something after they can see you have no references left. This is
+by constantly checking at runtime whether you have any references to something, and
+dropping only when you have no references left. This is
 called "garbage collection", and the advantage of it is that you never need
 to think about when objects dropped. The language just 
 does it for you. The disadvantage is performance -- garbage collection requires
 stopping your program occasionally for the language to scan every reference you have.
 
-Some languages (notably C and assembly) give you access to a "pointer" type. Since
-pointers are raw addresses in memory, the compiler leaves it to the programmer
-to ensure that they do not have dangling references. This allows C to be
-used in memory constrained environments, but unfortunately means that a bug 
-can access memory after it's destroyed; resulting in a crash, or worse, a
-security issue.
+Some languages (notably C and Assembly) give you access to a
+"pointer" type. Since pointers are raw addresses in memory, the compiler leaves
+it to the programmer to ensure that they do not have dangling references. This
+allows them to be used in memory constrained or performance critical
+environments, but unfortunately means that a bug can access memory after it's
+destroyed; resulting in a crash, or worse, a security issue.
 
 Rust is powerful because it gives you the convenience of knowing at run-time
 that you will never access freed memory; but the price you pay for this is

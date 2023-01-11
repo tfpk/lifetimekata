@@ -2,7 +2,9 @@
 
 members = [
         "exercises/02_lifetimes_explained/exercise",
-        "exercises/02_lifetimes_explained/solution",
+        "exercises/02_lifetimes_explained/solutions",
+        "exercises/03_lifetime_elision/exercise",
+        "exercises/03_lifetime_elision/solutions",
         "exercises/04_mutable_references_and_containers/exercise",
         "exercises/04_mutable_references_and_containers/solutions",
         "exercises/05_lifetimes_on_types/exercise",

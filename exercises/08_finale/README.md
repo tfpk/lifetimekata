@@ -6,6 +6,10 @@ in the next two chapters, but this chapter is a "finale" of sorts.
 In this exercise, we will be building a very simple clone of a glob system.
 This allows someone to ask whether a piece of text matches some description.
 
+It's worth noting that implementing the whole thing may take up to an hour. If you just want to work on the lifetimes,
+you can copy code from the `solution`, but this is a fun
+and rewarding exercise to complete in its entirety.
+
 For example, the glob `ab(cd|ef|gh)` matches any of the following strings: `abcd`, `abef`, `abgh`
 
 You will create a `Matcher` struct, which has three fields:
@@ -21,3 +25,34 @@ There are three components to this:
  - wildcards (the `.` character), which matches any single character.
  - optional text, like `(town|world|universe)`, which matches exactly one of a list of
    strings. So `(town|world|universe)` matches `town`, OR `world`, OR `universe`.
+   
+ These can be mixed and matched in any order (but you will never have one inside the other).
+ With this string, you should create a vector of MatcherTokens which refer to the relevant
+ parts of that string.
+ 
+ You will then write a function which takes another string, and sees how much of the `Matcher`
+ that particular string matches. You will return a vector of `(MatcherToken, &str)`, where the
+ `MatcherToken` is the token that matched some text, and the `&str` is the text that was matched.
+ 
+ 
+## An Example
+
+Say you had the matcher `(Black|Bridge)(rock|stone|water).company`. This can be broken down into four parts:
+ - `OneOfText(["Black", "Bridge"])`
+ - `OneOfText(["rock", "stone", "water"])`
+ - `Wildcard`
+ - `RawText("company")`
+
+Now, let's imagine we're given the following text: `BlackBridge`. `Black` matches the first token,
+but `Bridge` does not match the second token.
+So, we would return: `vec![(OneOfText(["Black", "Bridge"]), "Black")"]`. The most tokens we've matched is 1.
+
+For a different example, take `Bridgestone_Tyres`.
+`Bridge` matches the first matcher, `stone` matches
+the second matcher, `_` matches the third matcher,
+but `Tyres` doesn't match `company`. So the most tokens
+we've matched is 3. We'd return a vec containing:
+ 
+ - (`OneOfText(["Black", "Bridge"])`, `Bridge`)
+ - (`OneOfText(["rock", "stone", "water"])`, `"stone"`)
+ - (`Wildcard`, `"_"`)

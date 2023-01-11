@@ -1,15 +1,12 @@
-## Okay, so what do we do?
+# Lifetimes: The Solution to Dangling References
 
-What we can see here is that dangling references aren't usually
-caused by the function, but by how we call that function.
-What we want to do is restrict how the user can call a function,
-so that they are only allowed to call it if the compiler can
-ensure that the lifetimes are valid.
+What we can see here is that dangling references are caused by functions losing
+information about where references come from.
 
 The compiler can only decide if the function is correct if it
 knows how the lifetimes of it's inputs and outputs interact.
 So, we need to tell the compiler when lifetimes of inputs and
-outputs need to be the same.
+outputs will be the same.
 
 What we can do is tell the computer "my function works for any lifetimes,
 as long as the lifetimes of these inputs/outputs are the same".

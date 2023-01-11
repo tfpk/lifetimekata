@@ -4,7 +4,7 @@ When structs or enums have lifetimes on them, the way that `impl` blocks
 work also changes slightly.
 
 For example, say we want to create a struct which lets the user
-skip through words. You might start off something like this:
+iterate over a sentence. You might start off something like this:
 
 ``` rust,ignore
 // First, the struct:
@@ -61,7 +61,7 @@ impl<'lifetime> for WordIterator<'lifetime> {
 
 It's useful to note that we've done this in two parts -- `impl<'lifetime>` defines a lifetime `'lifetime`.
 It doesn't make any promises about what that lifetime is, it just says it exists.
-`WordIterator<'lifetime>` then uses the lifetime we created, and says "`WordIterator` must live for `lifetime`".
+`WordIterator<'lifetime>` then uses the lifetime we created, and says "the references in `WordIterator` must live for `lifetime`".
 
 Now, anywhere in the impl block, we can choose to use that lifetime:
 
@@ -121,7 +121,7 @@ Now that we've seen `impl` blocks that have lifetimes, let's discuss one more:
 This means that even if you take in many references in your arguments, Rust will assume that any references you return
 come from `self`, not any of those other references.
 
-# Exercise: Part 1
+# Exercise
 
 In the following code, we chose to use the `'borrow` lifetime, not the `'lifetime` lifetime.
 
