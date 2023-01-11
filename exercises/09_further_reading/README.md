@@ -10,6 +10,11 @@ you may find that there is a simpler alternative.
  - [The Rust Reference (In General)](https://doc.rust-lang.org/reference/)
  - [The Rustinomicon (Lifetimes)](https://doc.rust-lang.org/nomicon/lifetimes.html)
 
+# Other Useful Lifetimes Content
+
+- [Common Rust Lifetime Misconceptions](https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md)
+- [Crust of Rust: Lifetime Annotations](https://www.youtube.com/watch?v=rAl-9HwD858)
+
 ## Variance and Subtyping
 
 This guide does not cover the topic of "variance" at all, which is how lifetimes can be substituted for

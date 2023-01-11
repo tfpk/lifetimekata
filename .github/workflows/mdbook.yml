@@ -13,7 +13,7 @@ jobs:
         fetch-depth: 0
     - uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly
+        toolchain: stable
     - uses: actions/cache@v3
       with:
         path: |
@@ -29,7 +29,6 @@ jobs:
         which mdbook-keeper || cargo install mdbook-keeper
         which mdbook-cmdrun || cargo install mdbook-cmdrun
         which mdbook-footnote || cargo install mdbook-footnote
-        cargo build --bin macrokata
     - name: Deploy GitHub Pages
       run: |
         # This assumes your book is in the root of your repository.

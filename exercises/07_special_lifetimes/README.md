@@ -30,7 +30,7 @@ Similarly, any references to a constant can also be `&'static`. For example:
 const SOME_COORDINATE: (i32, i32) = (7, 4);
 
 fn main() {
-    let static_reference: &'static (i32, i32) = &SOME_COORDINATE
+    let static_reference: &'static (i32, i32) = &SOME_COORDINATE;
 }
 ```
 
@@ -54,7 +54,7 @@ struct Counter<'a> {
 
 impl<'a> Counter<'a> {
     fn increment(&mut self) {
-        self.counter += 1;
+        *self.counter += 1;
     }
 }
 
@@ -72,7 +72,7 @@ fn main() {
 That's fine, but you'll notice that the `impl` block doesn't actually use the `'a` lifetime anywhere.
 Therefore, we can simplify things by writing the following instead:
 
-``` rust
+``` rust,ignore
 impl Counter<'_> {
     fn increment(&mut self) {
         self.counter += 1;
