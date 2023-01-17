@@ -1,6 +1,6 @@
 # Footnote: Lifetimes on Trait Objects
 
-In chapter 8, we discussed placeholder lifetimes (`'_`). We said that
+In chapter 7, we discussed placeholder lifetimes (`'_`). We said that
 there were three ways you could use them:
 
  - To simplify `impl` blocks
@@ -63,9 +63,7 @@ The `get_bool` function returns a Boxed `Bool` trait object, based on whether
 
 It's important to realise that since trait objects might or might not contain a
 reference (or any number of references), all trait objects have lifetimes.
-This is true, even if no implementors of the trait contain references.
-
-(FOOTNOTE: https://doc.rust-lang.org/reference/types/trait-object.html#trait-object-lifetime-bounds)
+This is true, even if no implementors of the trait contain references.{{footnote:https://doc.rust-lang.org/reference/types/trait-object.html#trait-object-lifetime-bounds}}
 
 So, since we need to associate a lifetime with our trait object, we might
 think we could rely on lifetime elision. But how would lifetime elision

@@ -13,3 +13,5 @@ extra-watch-dirs = ["../exercises"]
 
 [output.html]
 no-section-label = true
+site-url = "/lifetimekata/"
+git-repository-url = "https://github.com/tfpk/lifetimekata/"
