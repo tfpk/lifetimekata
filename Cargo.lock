@@ -17,6 +17,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "ex04"
+version = "0.1.0"
+dependencies = [
+ "require_lifetimes",
+]
+
+[[package]]
 name = "ex05"
 version = "0.1.0"
 dependencies = [
@@ -24,22 +31,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "exercise"
+name = "ex07"
+version = "0.1.0"
+
+[[package]]
+name = "ex08"
 version = "0.1.0"
 dependencies = [
  "require_lifetimes",
 ]
-
-[[package]]
-name = "exercise_02"
-version = "0.1.0"
-dependencies = [
- "require_lifetimes",
-]
-
-[[package]]
-name = "exercise_08"
-version = "0.1.0"
 
 [[package]]
 name = "proc-macro2"
@@ -85,6 +85,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "soln04"
+version = "0.1.0"
+dependencies = [
+ "require_lifetimes",
+]
+
+[[package]]
 name = "soln05"
 version = "0.1.0"
 dependencies = [
@@ -92,22 +99,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "soln07"
+version = "0.1.0"
+
+[[package]]
 name = "soln08"
 version = "0.1.0"
 dependencies = [
  "require_lifetimes",
 ]
-
-[[package]]
-name = "solution_04"
-version = "0.1.0"
-dependencies = [
- "require_lifetimes",
-]
-
-[[package]]
-name = "solutions_08"
-version = "0.1.0"
 
 [[package]]
 name = "syn"
