@@ -18,17 +18,19 @@ $ git clone https://www.github.com/tfpk/lifetimekata/
 Most exercises are run in two steps:
 
 ``` sh
-$ cargo build --bin ex04
+$ cargo build --package ex04
 ```
 
 And then either:
 
 ``` sh
-$ cargo test --bin ex04
+$ cargo test --package ex04
 ```
 
 or:
 
 ``` sh
-$ cargo run --bin ex04
+$ cargo run --package ex04
 ```
+
+depending on whether it's a binary or a library.
