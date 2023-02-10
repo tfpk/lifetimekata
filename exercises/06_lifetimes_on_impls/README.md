@@ -125,7 +125,7 @@ come from `self`, not any of those other references.
 
 In the following code, we chose to use the `'borrow` lifetime, not the `'lifetime` lifetime.
 
-There are three ways we could implement this code. Describe the effect of each of these implementations.
+There are four ways we could implement this code. Describe the effect of each of these implementations.
 Specifically:
  - Do they compile?
  - Are there any circumstances where their lifetimes are not general enough?
