@@ -34,6 +34,7 @@ pub fn find_difference(sentence1: &str, sentence2: &str) -> Difference {
 #[cfg(test)]
 mod tests {
     use super::*;
+
     #[test]
     fn main() {
         let first_sentence = String::from("I hate the surf and the sand.");
