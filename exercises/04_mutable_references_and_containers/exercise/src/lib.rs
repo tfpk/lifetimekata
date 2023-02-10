@@ -2,7 +2,8 @@ use require_lifetimes::require_lifetimes;
 
 /// This function takes in a "vector" of `&strs`, a "loc" `usize`
 /// and a "new" `&str`. Your job is to replace the old string at the
-/// location (i.e., array index) "loc" with the "new" one.
+/// location (i.e., array index) "loc" with the "new" one.  Don't do
+/// anything if "loc" is beyond the end of "vector".
 ///
 /// Make sure it passes this test:
 ///
@@ -24,6 +25,7 @@ use require_lifetimes::require_lifetimes;
 /// // Set some references
 /// vector_set(&mut message, 1, &your);
 /// vector_set(&mut message, 4, &unknown);
+/// vector_set(&mut message, 10, &unknown);
 ///
 /// // Hopefully, they're now equal
 /// assert_eq!(message , vec!["Hello", "Your", "Name", "Is", "Unknown"]);
