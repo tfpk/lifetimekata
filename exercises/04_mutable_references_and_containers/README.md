@@ -2,7 +2,7 @@
 
 Mutable References work exactly the same way as regular references, with regards
 to lifetime elision. The reason we have a chapter about them, however, is that if
-you have a mutable reference, you might need to tell them compiler about lifetimes
+you have a mutable reference, you might need to tell the compiler about lifetimes
 even without a return value.
 
 For example, let's take a look at this example:
