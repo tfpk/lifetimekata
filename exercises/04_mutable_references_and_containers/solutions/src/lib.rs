@@ -1,8 +1,8 @@
 use require_lifetimes::require_lifetimes;
 
-/// This function takes in a vector of `&strs`, and "old" `&str`
-/// and a "new" `&str`. Your job is to replace the first occurence
-/// of the "old" string with the "new" one.
+/// This function takes in a "vector" of `&strs`, a "loc" `usize`
+/// and a "new" `&str`. Your job is to replace the old string at the
+/// location (i.e., array index) "loc" with the "new" one.
 ///
 /// Make sure it passes this test:
 ///
