@@ -7,7 +7,7 @@ use require_lifetimes::require_lifetimes;
 /// Make sure it passes this test:
 ///
 /// ```rust
-/// use solution_04::vector_set;
+/// use soln04::vector_set;
 ///
 ///
 /// // Create a vector of strings.
