@@ -72,8 +72,15 @@ impl<'a> Matcher<'a> {
             }
             match token {
                 MatcherToken::WildCard => {
-                    answer.push((token, &string_left[..1]));
-                    string_left = &string_left[1..];
+                    // Getting the number of bytes of the first
+                    // character of a str is tricky.  However, because
+                    // we've already verified that string_left is not
+                    // empty, we can use chars().next().unwrap() to
+                    // get the first char and then use len_utf8() to
+                    // find out how many bytes it takes up in a str.
+                    let byte_offset = string_left.chars().next().unwrap().len_utf8();
+                    answer.push((token, &string_left[..byte_offset]));
+                    string_left = &string_left[byte_offset..];
                 }
                 MatcherToken::OneOfText(options) => {
                     for start in options {
@@ -129,12 +136,13 @@ mod test {
         }
 
         {
+            // Change 'e' to '💪' if you want to test unicode.
             let candidate1 = "abcde".to_string();
             let result = matcher.match_string(&candidate1);
             assert_eq!(result, vec![
                 (&MatcherToken::RawText("abc"), "abc"),
                 (&MatcherToken::OneOfText(vec!["d", "e", "f"]), "d"),
-                (&MatcherToken::WildCard, "e")
+                (&MatcherToken::WildCard, "e") // or '💪'
             ]);
             assert_eq!(matcher.most_tokens_matched, 3);
         }

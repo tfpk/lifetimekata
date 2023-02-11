@@ -63,12 +63,13 @@ mod test {
         }
 
         {
+            // Change 'e' to '💪' if you want to test unicode.
             let candidate1 = "abcde".to_string();
             let result = matcher.match_string(&candidate1);
             assert_eq!(result, vec![
                 (&MatcherToken::RawText("abc"), "abc"),
                 (&MatcherToken::OneOfText(vec!["d", "e", "f"]), "d"),
-                (&MatcherToken::WildCard, "e")
+                (&MatcherToken::WildCard, "e") // or '💪'
             ]);
             assert_eq!(matcher.most_tokens_matched, 3);
         }
