@@ -2,16 +2,20 @@ use std::collections::HashSet;
 
 struct UniqueWords<'a> {
     sentence: &'a str,
-    unique_words: Vec<&'a str>
+    unique_words: Vec<&'a str>,
 }
 
 impl<'a> UniqueWords<'a> {
     fn new(sentence: &'a str) -> UniqueWords<'a> {
-        let unique_words = sentence.split(' ').collect::<HashSet<_>>().into_iter().collect::<Vec<_>>();
+        let unique_words = sentence
+            .split(' ')
+            .collect::<HashSet<_>>()
+            .into_iter()
+            .collect::<Vec<_>>();
 
         UniqueWords {
             sentence,
-            unique_words
+            unique_words,
         }
     }
 

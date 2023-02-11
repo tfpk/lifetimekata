@@ -3,7 +3,7 @@ use std::collections::HashSet;
 #[derive(Debug, Default)]
 pub struct Difference {
     first_only: Vec<&str>,
-    second_only: Vec<&str>
+    second_only: Vec<&str>,
 }
 
 pub fn find_difference(sentence1: &str, sentence2: &str) -> Difference {
@@ -28,7 +28,6 @@ pub fn find_difference(sentence1: &str, sentence2: &str) -> Difference {
     diff.second_only.sort();
 
     diff
-
 }
 
 #[cfg(test)]
@@ -56,5 +55,4 @@ mod tests {
 
         assert_eq!(second_only, vec!["surf"]);
     }
-
 }

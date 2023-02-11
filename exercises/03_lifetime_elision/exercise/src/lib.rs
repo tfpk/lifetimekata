@@ -6,7 +6,7 @@ pub fn example_a(_number: &i32) -> (&i32, &i32) {
 }
 
 #[require_lifetimes(!)]
-pub fn example_b(_first_arg: &i32, _second_arg: &i32, _third_arg: &Option<&i32> ) {
+pub fn example_b(_first_arg: &i32, _second_arg: &i32, _third_arg: &Option<&i32>) {
     unimplemented!()
 }
 

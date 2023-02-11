@@ -10,7 +10,7 @@ enum MatcherToken {
     OneOfText(Vec<&str>),
     /// This is when you're happy to accept any single character.
     /// It looks like `.`
-    WildCard
+    WildCard,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -56,9 +56,7 @@ mod test {
         {
             let candidate1 = "abcge".to_string();
             let result = matcher.match_string(&candidate1);
-            assert_eq!(result, vec![
-                (&MatcherToken::RawText("abc"), "abc"),
-            ]);
+            assert_eq!(result, vec![(&MatcherToken::RawText("abc"), "abc"),]);
             assert_eq!(matcher.most_tokens_matched, 1);
         }
 
@@ -66,11 +64,14 @@ mod test {
             // Change 'e' to '💪' if you want to test unicode.
             let candidate1 = "abcde".to_string();
             let result = matcher.match_string(&candidate1);
-            assert_eq!(result, vec![
-                (&MatcherToken::RawText("abc"), "abc"),
-                (&MatcherToken::OneOfText(vec!["d", "e", "f"]), "d"),
-                (&MatcherToken::WildCard, "e") // or '💪'
-            ]);
+            assert_eq!(
+                result,
+                vec![
+                    (&MatcherToken::RawText("abc"), "abc"),
+                    (&MatcherToken::OneOfText(vec!["d", "e", "f"]), "d"),
+                    (&MatcherToken::WildCard, "e") // or '💪'
+                ]
+            );
             assert_eq!(matcher.most_tokens_matched, 3);
         }
     }
@@ -80,6 +81,5 @@ mod test {
         let match_string = "abc(d|e|f.".to_string();
         let matcher = Matcher::new(&match_string);
         assert_eq!(matcher, None);
-
     }
 }

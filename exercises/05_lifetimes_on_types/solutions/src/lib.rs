@@ -3,10 +3,13 @@ use std::collections::HashSet;
 #[derive(Debug, Default)]
 pub struct Difference<'first, 'second> {
     first_only: Vec<&'first str>,
-    second_only: Vec<&'second str>
+    second_only: Vec<&'second str>,
 }
 
-pub fn find_difference<'fst, 'snd>(sentence1: &'fst str, sentence2: &'snd str) -> Difference<'fst, 'snd> {
+pub fn find_difference<'fst, 'snd>(
+    sentence1: &'fst str,
+    sentence2: &'snd str,
+) -> Difference<'fst, 'snd> {
     let sentence_1_words: HashSet<&str> = sentence1.split(" ").collect();
     let sentence_2_words: HashSet<&str> = sentence2.split(" ").collect();
 
@@ -28,7 +31,6 @@ pub fn find_difference<'fst, 'snd>(sentence1: &'fst str, sentence2: &'snd str) -
     diff.second_only.sort();
 
     diff
-
 }
 
 #[cfg(test)]
@@ -55,5 +57,4 @@ mod tests {
 
         assert_eq!(second_only, vec!["surf"]);
     }
-
 }

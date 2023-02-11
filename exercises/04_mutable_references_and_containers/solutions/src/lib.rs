@@ -34,7 +34,7 @@ use require_lifetimes::require_lifetimes;
 pub fn vector_set<'vector_life, 'borrow_life>(
     vector: &'vector_life mut Vec<&'borrow_life str>,
     loc: usize,
-    new: &'borrow_life str
+    new: &'borrow_life str,
 ) {
     if let Some(element) = vector.get_mut(loc) {
         *element = new;

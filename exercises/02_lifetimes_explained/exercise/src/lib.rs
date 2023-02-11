@@ -52,7 +52,7 @@ pub fn split(text: &str, delimiter: &str) -> Vec<&str> {
     let mut matches: Vec<&str> = vec![];
     for i in 0..text.len() {
         if i < last_split {
-            continue
+            continue;
         }
         if text[i..].starts_with(delimiter) {
             matches.push(&text[last_split..i]);
@@ -126,5 +126,4 @@ pub fn only_if_greater_hard(number: &i32, greater_than: &i32, otherwise: &i32) -
     } else {
         otherwise
     }
-
 }

@@ -90,7 +90,7 @@ pub fn split<'a, 'b>(text: &'a str, delimiter: &'b str) -> Vec<&'a str> {
     let mut matches: Vec<&str> = vec![];
     for i in 0..text.len() {
         if i < last_split {
-            continue
+            continue;
         }
         if text[i..].starts_with(delimiter) {
             matches.push(&text[last_split..i]);
@@ -158,11 +158,14 @@ pub fn split<'a, 'b>(text: &'a str, delimiter: &'b str) -> Vec<&'a str> {
 /// assert_eq!(&num, answer);
 /// ```
 #[require_lifetimes(!)]
-pub fn only_if_greater_hard<'a, 'b>(number: &'a i32, greater_than: &'b i32, otherwise: &'a i32) -> &'a i32 {
+pub fn only_if_greater_hard<'a, 'b>(
+    number: &'a i32,
+    greater_than: &'b i32,
+    otherwise: &'a i32,
+) -> &'a i32 {
     if number > greater_than {
         number
     } else {
         otherwise
     }
-
 }
