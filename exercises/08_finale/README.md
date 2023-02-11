@@ -56,3 +56,12 @@ we've matched is 3. We'd return a vec containing:
  - (`OneOfText(["Black", "Bridge"])`, `Bridge`)
  - (`OneOfText(["rock", "stone", "water"])`, `"stone"`)
  - (`Wildcard`, `"_"`)
+
+### A Note On Unicode
+
+Rust is able to deal with unicode characters (like emoji or Japanese Kanji) in its strings.
+Of course, this increases the amount of complexity that is required for simple operations like
+splitting a string into pieces, because it's possible to accidentally split a character in half.
+
+The tests in the example *do not* use unicode, however if you want a "true" Rust experience,
+change the tests to include a unicode character (an example is in the comments).
