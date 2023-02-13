@@ -1,14 +1,14 @@
 # Further Reading in the Rust Reference
 
 The best sources of information about lifetimes are the Rust Reference and
-Rustinomicon. If you require a really advanced knowledge of lifetimes to
+Rustonomicon. If you require a really advanced knowledge of lifetimes to
 complete a project, the reference will contain that knowledge. Most times,
 however, if you feel you need to understand something complex about lifetimes,
 you may find that there is a simpler alternative.
 
  - [The Rust Reference (Lifetime Elision)](https://doc.rust-lang.org/reference/lifetime-elision.html)
  - [The Rust Reference (In General)](https://doc.rust-lang.org/reference/)
- - [The Rustinomicon (Lifetimes)](https://doc.rust-lang.org/nomicon/lifetimes.html)
+ - [The Rustonomicon (Lifetimes)](https://doc.rust-lang.org/nomicon/lifetimes.html)
 
 # Other Useful Lifetimes Content
 
@@ -21,7 +21,7 @@ This guide does not cover the topic of "variance" at all, which is how lifetimes
 one-another. Variance, while theoretically important, is not useful in a day-to-day understanding
 of lifetimes, and so it was not included in the book.
 
-You can read more about it in [the Rustinomicon (subtyping)](https://doc.rust-lang.org/nomicon/subtyping.html).
+You can read more about it in [the Rustonomicon (subtyping)](https://doc.rust-lang.org/nomicon/subtyping.html).
 
 ## Brain Teaser 1: Why doesn't this program work:
 
