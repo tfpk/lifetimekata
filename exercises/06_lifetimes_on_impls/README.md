@@ -134,10 +134,10 @@ Specifically:
 ### Example 1
 ``` rust,ignore
     /// Gives the next word. `None` if there aren't any words left.
-#   /// This compiles. It's the exact same as Example 4.
-#   /// If you want to save the string you received, and call this again,
-#   /// you cannot use this function, since the borrow needs to last
-#   /// as long as the string.
+#    /// This compiles. It's the exact same as Example 4.
+#    /// If you want to save the string you received, and call this again,
+#    /// you cannot use this function, since the borrow needs to last
+#    /// as long as the string.
     fn next_word<'borrow>(&'borrow mut self) -> Option<&'borrow str> {
         // ...
     }
@@ -146,7 +146,7 @@ Specifically:
 ### Example 2
 ``` rust,ignore
     /// Gives the next word. `None` if there aren't any words left.
-#   /// This compiles. It's the exact same as Example 3.
+#    /// This compiles. It's the exact same as Example 3.
     fn next_word<'borrow>(&'borrow mut self) -> Option<&'lifetime str> {
         // ...
     }
@@ -155,9 +155,9 @@ Specifically:
 ### Example 3
 ``` rust,ignore
     /// Gives the next word. `None` if there aren't any words left.
-#   /// This compiles. It's probably the "most" correct, because it's the shortest
-#   /// to write, but also ensures you can retain the returned strings, even if
-#   /// you call this function multiple times.
+#    /// This compiles. It's probably the "most" correct, because it's the shortest
+#    /// to write, but also ensures you can retain the returned strings, even if
+#    /// you call this function multiple times.
     fn next_word(&mut self) -> Option<&'lifetime str> {
         // ...
     }
@@ -166,7 +166,7 @@ Specifically:
 ### Example 4
 ``` rust,ignore
     /// Gives the next word. `None` if there aren't any words left.
-#   /// This compiles. If expanded, it would be the same as Example 1.
+#    /// This compiles. If expanded, it would be the same as Example 1.
     fn next_word(&mut self) -> Option<&str> {
         // ...
     }
