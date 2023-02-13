@@ -184,7 +184,7 @@ fn example_3() {
     assert_eq!(answer, &4);
 }
 
-# // This is always a dangling refernece.
+# // This is always a dangling reference.
 fn example_4() {
     let y = 4;
     let answer = {
