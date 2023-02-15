@@ -33,7 +33,7 @@ Unfortunately, it doesn't work. This took the author of this book
 20 minutes to figure out (after having written 5 chapters), so he
 challenges you to do better!
 
-```rust
+```rust,ignore
 use std::collections::HashSet;
 
 struct Difference<'first, 'second> {

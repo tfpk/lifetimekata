@@ -125,7 +125,7 @@ but that the compiler should just figure it out.
 
 ## Lifetimes on Trait Objects
 
-See [Chapter 10: Footnote on Trait Lifetime Bounds](../10_footnote_lifetimes_on_trait_objects/README.md) for the gory details.
+See [Chapter 10: Footnote on Trait Lifetime Bounds](./chapter_10.md) for the gory details.
 
 # Lifetime Bounds
 
@@ -161,7 +161,7 @@ Your task is to replace every occurance of the lifetimes `'a` and `'b` with eith
 `'_` or `'static`, and to ensure your code still compiles.
 
 ### Footnote on Out of Date Information
-  * [ ] 
+ 
 The Rust Edition Guide previously contained a section
 about anonymous lifetimes. The most popular google result
 is now [this article](https://yegeun542.github.io/rust-edition-guide-ko/rust-2018/ownership-and-lifetimes/the-anonymous-lifetime.html) but I recommend disregarding it, as it is out of date information.
