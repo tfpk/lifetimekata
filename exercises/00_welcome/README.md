@@ -1,6 +1,6 @@
-# Chapter 0: References and Lifetimes Revision
+# Chapter 0: References and Lifetimes Review
 
-*(This section is revision, and may be familiar to some readers.
+*(This section is review, and may be familiar to some readers.
  If you already know what a reference is, you can skip it.)*
 
 If you've been using rust for a while, you've likely already encountered
