@@ -125,7 +125,7 @@ but that the compiler should just figure it out.
 
 ## Lifetimes on Trait Objects
 
-See `12_lifetimes_on_trait_objects` for the gory details.
+See [Chapter 10: Footnote on Trait Lifetime Bounds](../10_footnote_lifetimes_on_trait_objects/README.md) for the gory details.
 
 # Lifetime Bounds
 

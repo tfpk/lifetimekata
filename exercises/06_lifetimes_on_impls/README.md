@@ -48,7 +48,7 @@ fn main() {
 ```
 
 When defining our `WordIterator` struct, we said it requires a lifetime to be specified.
-But when we then wrote the impl block, we didn't specifiy one. Rust requires that we do this.
+But when we then wrote the impl block, we didn't specify one. Rust requires that we do this.
 
 The way we do this is by telling rust about a lifetime, and then putting that lifetime onto
 our struct. Let's see how we do that:
@@ -109,7 +109,7 @@ impl<'lifetime> WordIterator<'lifetime> {
 
 We previously discussed two rules for lifetime elision. They are:
 
-1. Each place that an input lifetime is left out (a.k.a 'elided') is filled in with it's own lifetime.
+1. Each place that an input lifetime is left out (a.k.a 'elided') is filled in with its own lifetime.
 2. If there's exactly one lifetime on all the input references, that lifetime is assigned to *every* output lifetime.
 
 Now that we've seen `impl` blocks that have lifetimes, let's discuss one more:
