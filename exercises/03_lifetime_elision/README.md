@@ -76,7 +76,7 @@ Let's see how those rules affect the above two examples, and an example from the
 We had:
 
 ``` rust,ignore
-fn add(a: &mut i32, b: &mut i32) {
+fn add(a: &mut i32, b: &mut i32) -> i32 {
     *a + *b
 }
 ```
