@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 2: Lifetimes Explained - LifetimeKata</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_0.html">Chapter 0: Revision</a></li><li class="chapter-item expanded "><a href="chapter_1.html">Chapter 1: Lifetimes Needed</a></li><li class="chapter-item expanded "><a href="chapter_2.html" class="active">Chapter 2: Lifetimes Explained</a></li><li class="chapter-item expanded "><a href="chapter_3.html">Chapter 3: Lifetime Elision</a></li><li class="chapter-item expanded "><a href="chapter_4.html">Chapter 4: Mutable References and Containers</a></li><li class="chapter-item expanded "><a href="chapter_5.html">Chapter 5: Lifetimes on Types</a></li><li class="chapter-item expanded "><a href="chapter_6.html">Chapter 6: Lifetimes on Impls</a></li><li class="chapter-item expanded "><a href="chapter_7.html">Chapter 7: Special Lifetimes</a></li><li class="chapter-item expanded "><a href="chapter_8.html">Chapter 8: Finale</a></li><li class="chapter-item expanded "><a href="chapter_9.html">Chapter 9: Further Reading</a></li><li class="chapter-item expanded "><a href="chapter_10.html">Chapter 10: Footnote on Trait Lifetime Bounds</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">LifetimeKata</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/tfpk/lifetimekata/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lifetimes-the-solution-to-dangling-references"><a class="header" href="#lifetimes-the-solution-to-dangling-references">Lifetimes: The Solution to Dangling References</a></h1>
+<p>What we can see here is that dangling references are caused by functions losing
+information about where references come from.</p>
+<p>The compiler can only decide if the function is correct if it
+knows how the lifetimes of it's inputs and outputs interact.
+So, we need to tell the compiler when lifetimes of inputs and
+outputs will be the same.</p>
+<p>What we can do is tell the computer &quot;my function works for any lifetimes,
+as long as the lifetimes of these inputs/outputs are the same&quot;.
+Let's take a look at the syntax of this:</p>
+<pre><pre class="playground"><code class="language-rust">fn some_if_greater&lt;'lifetime1, 'lifetime2&gt;(number: &amp;'lifetime1 i32, greater_than: &amp;'lifetime2 i32) -&gt; Option&lt;&amp;'lifetime1 i32&gt; {
+    if number &gt; greater_than {
+        Some(number)
+    } else {
+        None
+    }
+}
+<span class="boring">fn main() {
+</span><span class="boring">    let (n, gt) = (7, 4);
+</span><span class="boring">    let test = some_if_greater(&amp;n, &amp;gt);
+</span><span class="boring">}</span></code></pre></pre>
+<p>Let's walk through what this does:</p>
+<ul>
+<li><code>fn my_function&lt;'lifetime1, 'lifetime2&gt;(...)</code>: what we're doing here
+is choosing some names for the lifetimes our program requires.</li>
+<li><code>number: &amp;'lifetime1 i32</code>: this is us telling the compiler that
+this reference must live for some region of code called <code>'lifetime1</code>.</li>
+<li><code>greater_than: &amp;'lifetime2 i32</code>: this is us telling the compiler that
+this reference must live for some region of code called <code>'lifetime2</code>.
+This means that the lifetimes of <code>greater_than</code> and <code>number</code> don't
+have to relate at all.</li>
+<li><code>-&gt; Option&lt;&amp;'lifetime1 i32&gt;</code>: this is where lifetimes are important.
+what we're saying is that <code>number</code> and our return value must be
+valid for exactly the same region of code. </li>
+</ul>
+<p>So, what we've done is told the compiler that our function can only be called
+if <code>number</code> and the return are valid in the same region of code.</p>
+<h1 id="exercise-annotate-lifetimes"><a class="header" href="#exercise-annotate-lifetimes">Exercise: Annotate lifetimes</a></h1>
+<p>Just to get some initial practice, the exercise in this section is to annotate lifetimes on some of the examples of the last two chapters.</p>
+<p>You will need to:</p>
+<ul>
+<li>decide how many lifetime parameters are necessary</li>
+<li>name each of those lifetime parameters, and put them inside <code>&lt;</code> angle brackets <code>&gt;</code> after the function's name. </li>
+<li>annotate every reference with the appropriate lifetime</li>
+<li>check the code compiles</li>
+<li>think about what region of code each lifetime could be</li>
+</ul>
+<p>You will notice each function has the <code>#[lifetimes_required(!)]</code> annotation. You will need
+to leave it there to complete this exercise. This instructs the compiler to throw an
+error whenever you miss a lifetime; even if the compiler doesn't need the lifetime.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter_1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="chapter_3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter_1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="chapter_3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
