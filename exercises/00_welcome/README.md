@@ -100,19 +100,24 @@ it's possible that the `if let` could try and access `my_reference`, and find th
 it's referencing a variable that no longer exists.
 
 Rust says that this variable "does not live long enough". It notices that
-"it's possible that `my_variable` is dropped before `my_reference`".
+"it's possible that `my_variable` is dropped before the reference stored in `my_reference`".
 
 Formally, we can see this by noticing the regions of code where these two
-variables need to exist. The region of code where the reference needs to exist
+things need to exist. The region of code where the reference needs to exist
 is *larger* than the region of code where the variable exists. This indicates
 that there must be part of the time the reference exists where the variable
 has been dropped, and therefore a dangling reference might exist.
 
-We call a region of code where a variable exists a "lifetime". We can
-give lifetimes names using the syntax `'name`. So if we call the variable's
-lifetime `'variable`, and the reference's lifetime `'reference`, we can
-then formally say that for any variable that references another variable,
-`'variable` must be larger than `'reference`.
+We call a region of code where a reference must be valid a "lifetime". We can
+give lifetimes names using the syntax `'name`. So let us say that `'variable`
+is the region of code where a reference to the variable is valid.
+Also, let's say that `'reference` is the region of code where the reference
+could be used. We can formally say that `'variable` must be larger than `'reference`.
+
+This is obviously true, it is a shorthand for saying "the region of code where the reference is valid
+must be larger than the region of code where the reference is actually usable". Consider
+the opposite: if the reference was usable somewhere where the reference wasn't valid, you'd
+have something that was *invalid*: unsound code, or in other words, a bug.
 
 ## So what's this book about then?
 
