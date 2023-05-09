@@ -30,7 +30,7 @@ your understanding of lifetimes and generics, the following exercise may be inte
 
 This should be another way of implementing the code in exercise 5.
 Unfortunately, it doesn't work. This took the author of this book
-20 minutes to figure out (after having written 5 chapters), so he
+20 minutes to figure out (after having written five chapters), so he
 challenges you to do better!
 
 ```rust,ignore
@@ -74,4 +74,4 @@ fn main() {
 }
 ```
 
-For more information about this issue, read [this rust issue](https://github.com/rust-lang/rust/issues/73788).
+For more information about this issue, read [this Rust issue](https://github.com/rust-lang/rust/issues/73788).

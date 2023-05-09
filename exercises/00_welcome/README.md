@@ -3,7 +3,7 @@
 *(This section is review, and may be familiar to some readers.
  If you already know what a reference is, you can skip it.)*
 
-If you've been using rust for a while, you've likely already encountered
+If you've been using Rust for a while, you've likely already encountered
 references. For every type `T`, there are two types of references to it:
 
  - `&T`: A shared reference (often called a shared borrow) of `T`. You can have
@@ -116,7 +116,7 @@ then formally say that for any variable that references another variable,
 
 ## So what's this book about then?
 
-There are places where the rust compiler is unable to figure out lifetimes, and
+There are places where the Rust compiler is unable to figure out lifetimes, and
 needs the programmer to explicitly specify this. This book is to help you
 improve at writing explicit lifetimes (things like `&'a str`). And that starts
 with the next chapter!

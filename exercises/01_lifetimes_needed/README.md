@@ -51,7 +51,7 @@ It's impossible for a compiler to tell whether this reference should be valid.
 
 Your next thought might be "OK, surely all references of this type are unsound; lets just disallow them".
 It would be worth being specific about what this ban is. The simplest ban would be "no references in function parameters",
-but that might just be a little excessive (and entirely destructive to how useful rust is).
+but that might just be a little excessive (and entirely destructive to how useful Rust is).
 
 A more sensible ban which would cover this case would be: "Any function with
 more than one reference input may not return a reference (or something
