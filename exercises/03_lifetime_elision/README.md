@@ -2,12 +2,12 @@
 
 In the last chapter, we saw why we needed lifetimes. We saw that the compiler
 was unable to automatically tell how references in the arguments or return
-values might relate to eachother. This is why we needed to tell the compiler
-that the references related to eachother.
+values might relate to each other. This is why we needed to tell the compiler
+that the references related to each other.
 
 This said, you've probably written a function in Rust that needed a reference
 (likely a `&str`), without writing lifetimes. Why didn't you have to annotate
-lifetimes then? There are some common patterns in rust that make it obvious to
+lifetimes then? There are some common patterns in Rust that make it obvious to
 the compiler what the lifetimes should be. Let's explore some of them:
 
 ## Example 1: No Output References
@@ -66,7 +66,7 @@ are those in the return type of the function.
 
 The two rules that we'll learn in this chapter are:
 
-1. Each place that an input lifetime is left out (a.k.a 'elided') is filled in with it's own lifetime.
+1. Each place that an input lifetime is left out (a.k.a 'elided') is filled in with its own lifetime.
 2. If there's exactly one lifetime on all the input references, that lifetime is assigned to *every* output lifetime.
 
 Let's see how those rules affect the above two examples, and an example from the last chapter:
@@ -170,9 +170,10 @@ fn max_of_refs<'elided1, 'elided2>(a: &'elided1 i32, b: &'elided2 i32) -> &i32 {
 }
 ```
 
-But unlike Example 1, there are now two input lifetimes! The second rule
-only works if we have one input lifetime. Therefore, rust considers it an
-error to elide lifetimes here -- the user has to give more information!
+But unlike Example 1, we need an output lifetime! By the second rule, we can
+only elide the output lifetime if we have exactly one input lifetime. Therefore,
+Rust considers it an error to elide lifetimes here -- the user has to give more
+information!
 
 ## Exercise: Apply These Rules
 

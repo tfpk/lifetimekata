@@ -113,10 +113,10 @@ with two lifetimes.
 
 Take the example of a program to find unique words among two sentences.
 
-You might have the first sentence be `"I love to swim and surf."`,
-and the second be `"I love to ski and snowboard."`. The unique
-words to the first sentence are `"swim"` and `"surf"`. The unique
-words to the second sentence are `"ski"` and `"snowboard"`.
+You might have the first sentence be `"I love to swim and surf."`, and the
+second be `"I love to ski and snowboard."`. The words unique to the first
+sentence are `"swim"` and `"surf"`. The words unique to the second sentence are
+`"ski"` and `"snowboard"`.
 
 If you said that the two sentences had to share a lifetime, you would
 be forcing the user to ensure that the two sentences came from the same

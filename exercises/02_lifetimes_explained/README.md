@@ -4,7 +4,7 @@ What we can see here is that dangling references are caused by functions losing
 information about where references come from.
 
 The compiler can only decide if the function is correct if it
-knows how the lifetimes of it's inputs and outputs interact.
+knows how the lifetimes of its inputs and outputs interact.
 So, we need to tell the compiler when lifetimes of inputs and
 outputs will be the same.
 

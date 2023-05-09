@@ -50,7 +50,7 @@ fn main() {
 When defining our `WordIterator` struct, we said it requires a lifetime to be specified.
 But when we then wrote the impl block, we didn't specify one. Rust requires that we do this.
 
-The way we do this is by telling rust about a lifetime, and then putting that lifetime onto
+The way we do this is by telling Rust about a lifetime, and then putting that lifetime onto
 our struct. Let's see how we do that:
 
 ``` rust,ignore
