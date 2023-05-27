@@ -123,7 +123,7 @@ come from `self`, not any of those other references.
 
 # Exercise
 
-In the following code, we chose to use the `'borrow` lifetime, not the `'lifetime` lifetime.
+In the following code, we chose to use the `'borrow` lifetime which affects the reference to the `struct`, not only the `'lifetime` lifetime which comes from the relevant part of the `struct`.
 
 There are four ways we could implement this code. Describe the effect of each of these implementations.
 Specifically:
