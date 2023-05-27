@@ -158,7 +158,8 @@ You have been given code which contains many uses of the lifetimes `'a` and `'b'
 All of these lifetimes can be replaced with either `'_` or `'static`.
 
 Your task is to replace every occurance of the lifetimes `'a` and `'b` with either
-`'_` or `'static`, and to ensure your code still compiles.
+`'_` or `'static`, to remove excessive lifetime declarations, and to ensure your 
+code still compiles.
 
 ### Footnote on Out of Date Information
  
