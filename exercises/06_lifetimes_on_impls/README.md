@@ -115,7 +115,7 @@ We previously discussed two rules for lifetime elision. They are:
 Now that we've seen `impl` blocks that have lifetimes, let's discuss one more:
 
 3. If there are multiple input lifetime positions, but one of them is `&self` or
-   `&mut self`, the lifetime of the borrow is assigned to all elided output lifetimes.
+   `&mut self`, the lifetime of the borrow of `self` is assigned to all elided output lifetimes.
    
 This means that even if you take in many references in your arguments, Rust will assume that any references you return
 come from `self`, not any of those other references.
