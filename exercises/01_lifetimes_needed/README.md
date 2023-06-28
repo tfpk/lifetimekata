@@ -137,7 +137,7 @@ fn identity(a: &i32) -> &i32 {
 fn example_1() {
     let x = 4;
     let x_ref = identity(&x);
-    assert_eq(*x_ref, 4);
+    assert_eq!(*x_ref, 4);
 }
 
 # // This is always going to cause a dangling reference.
