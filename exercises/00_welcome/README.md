@@ -60,12 +60,12 @@ You've undoubtedly come across errors like the one below before:
 
 ```rust,ignore
 fn main() {
-    let mut my_reference: Option<&i32> = None;
+    let mut my_reference: Option<&String> = None;
 
     // Starting a scope.
     {
         // my_variable created                               // \ \
-        let my_variable: i32 = 7;                            // | |
+        let my_variable: String = "hello".to_string();       // | |
         my_reference = Some(&my_variable);                   // | |- my_variable exists here. ('variable)
         // At the end of the scope, `my_variable` is dropped // | |
         drop(my_variable);                                   // | |
