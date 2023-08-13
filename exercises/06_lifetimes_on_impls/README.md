@@ -63,7 +63,8 @@ It's useful to note that we've done this in two parts -- `impl<'lifetime>` defin
 It doesn't make any promises about what that lifetime is, it just says it exists.
 `WordIterator<'lifetime>` then uses the lifetime we created, and says "the references in `WordIterator` must live for `lifetime`".
 
-Now, anywhere in the impl block, we can choose to use that lifetime:
+Now, anywhere in the impl block, we can choose to use that lifetime. Any reference we annotate with `'lifetime'`
+must have the same lifetime as any other reference annotated with `'lifetime'`.
 
 ``` rust,ignore
 # /// This struct keeps track of where we're up to in the string.
@@ -122,11 +123,15 @@ come from `self`, not any of those other references.
 
 # Exercise
 
-In the following code, we chose to use the `'borrow` lifetime, not the `'lifetime` lifetime.
+In the following code, we annotate the function using the `'borrow` lifetime, not only the `'lifetime` lifetime.
+The `'borrow` lifetime only exists inside this function, and only affects the borrows of its arguments and return
+value. The `'lifetime` value, as we saw before, also constrains the lifetime of the string inside the struct.
 
 There are four ways we could implement this code. Describe the effect of each of these implementations.
+
 Specifically:
  - Do they compile?
+ - Are any of them identical to another one?
  - Are there any circumstances where their lifetimes are not general enough?
  - Which would be the "most" correct to write?
 
@@ -134,9 +139,9 @@ Specifically:
 ``` rust,ignore
     /// Gives the next word. `None` if there aren't any words left.
 #    /// This compiles. It's the exact same as Example 4.
-#    /// If you want to save the string you received, and call this again,
-#    /// you cannot use this function, since the borrow needs to last
-#    /// as long as the string.
+#    /// This function is problematic because the next word lives as long
+#    /// as your borrow of the iterator. In order to get the next word, you
+#    /// must drop all references to the current one.
     fn next_word<'borrow>(&'borrow mut self) -> Option<&'borrow str> {
         // ...
     }
