@@ -129,4 +129,4 @@ with the next chapter!
 ## Exercise: Complete the Rustlings Exercises on Lifetimes
 
 If you aren't sure you understand the above, before reading on,
-[complete the rustlings exercises about lifetimes](https://github.com/rust-lang/rustlings/tree/main/exercises/lifetimes).
+[complete the rustlings exercises about lifetimes](https://github.com/rust-lang/rustlings/tree/main/exercises/16_lifetimes).
