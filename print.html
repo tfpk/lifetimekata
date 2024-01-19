@@ -1,0 +1,1497 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>LifetimeKata</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_0.html">Chapter 0: Revision</a></li><li class="chapter-item expanded "><a href="chapter_1.html">Chapter 1: Lifetimes Needed</a></li><li class="chapter-item expanded "><a href="chapter_2.html">Chapter 2: Lifetimes Explained</a></li><li class="chapter-item expanded "><a href="chapter_3.html">Chapter 3: Lifetime Elision</a></li><li class="chapter-item expanded "><a href="chapter_4.html">Chapter 4: Mutable References and Containers</a></li><li class="chapter-item expanded "><a href="chapter_5.html">Chapter 5: Lifetimes on Types</a></li><li class="chapter-item expanded "><a href="chapter_6.html">Chapter 6: Lifetimes on Impls</a></li><li class="chapter-item expanded "><a href="chapter_7.html">Chapter 7: Special Lifetimes</a></li><li class="chapter-item expanded "><a href="chapter_8.html">Chapter 8: Finale</a></li><li class="chapter-item expanded "><a href="chapter_9.html">Chapter 9: Further Reading</a></li><li class="chapter-item expanded "><a href="chapter_10.html">Chapter 10: Footnote on Trait Lifetime Bounds</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">LifetimeKata</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/tfpk/lifetimekata/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="lifetimekata"><a class="header" href="#lifetimekata">LifetimeKata</a></h1>
+<p>Welcome to LifetimeKata, a set of exercises which you can use to improve your
+understanding of lifetimes in Rust. While many tasks involve writing compiling
+code, some will also involve creating specific errors.</p>
+<p>You should complete the kata in order, as they increase in
+difficulty, and depend on previous kata.</p>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>Clone this repository:</p>
+<pre><code class="language-sh">$ git clone https://www.github.com/tfpk/lifetimekata/
+</code></pre>
+<p>Most exercises are run in two steps:</p>
+<pre><code class="language-sh">$ cargo build --package ex04
+</code></pre>
+<p>And then either:</p>
+<pre><code class="language-sh">$ cargo test --package ex04
+</code></pre>
+<p>or:</p>
+<pre><code class="language-sh">$ cargo run --package ex04
+</code></pre>
+<p>depending on whether it's a binary or a library.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-0-references-and-lifetimes-review"><a class="header" href="#chapter-0-references-and-lifetimes-review">Chapter 0: References and Lifetimes Review</a></h1>
+<p><em>(This section is review, and may be familiar to some readers.
+If you already know what a reference is, you can skip it.)</em></p>
+<p>If you've been using Rust for a while, you've likely already encountered
+references. For every type <code>T</code>, there are two types of references to it:</p>
+<ul>
+<li><code>&amp;T</code>: A shared reference (often called a shared borrow) of <code>T</code>. You can have
+as many of these as you'd like, but they do not allow you to modify the 
+data they refer to.</li>
+<li><code>&amp;mut T</code>: A mutable reference (often called an exclusive borrow) of <code>T</code>.
+You can only have one of these at a time, but they allow you to modify
+the data they refer to.</li>
+</ul>
+<p>References make it easy to call a function on data
+without needing to copy that data.</p>
+<p>The powerful thing about Rust's references is that they are guaranteed to always
+refer to something that still exists (i.e. has not been dropped/freed/gone out
+of scope). A reference to something that no longer exists is called a &quot;dangling
+reference&quot;, and Rust guarantees you will never have one. Therefore, this example
+will not compile:</p>
+<pre><code class="language-rust ignore">fn main() {
+    let x_ref = {
+        let x = 3;
+        &amp;x
+    };
+    // x_ref would now refer to `x`, but `x` is out of scope, so x_ref is dangling.
+   
+    println!(&quot;{}&quot;, x_ref)
+}</code></pre>
+<p>Most modern languages (Python, Java, etc.) avoid the problem of dangling references
+by constantly checking at runtime whether you have any references to something, and
+dropping only when you have no references left. This is
+called &quot;garbage collection&quot;, and the advantage of it is that you never need
+to think about when objects dropped. The language just 
+does it for you. The disadvantage is performance -- garbage collection requires
+stopping your program occasionally for the language to scan every reference you have.</p>
+<p>Some languages (notably C and Assembly) give you access to a
+&quot;pointer&quot; type. Since pointers are raw addresses in memory, the compiler leaves
+it to the programmer to ensure that they do not have dangling references. This
+allows them to be used in memory constrained or performance critical
+environments, but unfortunately means that a bug can access memory after it's
+destroyed; resulting in a crash, or worse, a security issue.</p>
+<p>Rust is powerful because it gives you the convenience of knowing at run-time
+that you will never access freed memory; but the price you pay for this is
+the compiler needing to be convinced at compile-time that you've
+correctly used references.</p>
+<h2 id="an-example-of-an-unconvinced-compiler"><a class="header" href="#an-example-of-an-unconvinced-compiler">An Example of an Unconvinced Compiler</a></h2>
+<p>You've undoubtedly come across errors like the one below before:</p>
+<pre><code class="language-rust ignore">fn main() {
+    let mut my_reference: Option&lt;&amp;String&gt; = None;
+
+    // Starting a scope.
+    {
+        // my_variable created                               // \ \
+        let my_variable: String = &quot;hello&quot;.to_string();       // | |
+        my_reference = Some(&amp;my_variable);                   // | |- my_variable exists here. ('variable)
+        // At the end of the scope, `my_variable` is dropped // | |
+        drop(my_variable);                                   // | |
+        // my variable destroyed                             // | /
+    }                                                        // | - my_reference needs to exist here. ('reference)
+                                                             // |
+    if let Some(reference) = my_reference {                  // |
+        println!(&quot;{}&quot;, reference);                           // |
+    }                                                        // /
+
+}</code></pre>
+<pre><code>error[E0597]: `my_variable` does not live long enough
+  --&gt; bad_lifetimes.rs:7:29
+   |
+7  |         my_reference = Some(&amp;my_variable);
+   |                             ^^^^^^^^^^^^ borrowed value does not live long enough
+8  |     }
+   |     - `my_variable` dropped here while still borrowed
+9  |
+10 |     if let Some(reference) = my_reference {
+   |                              ------------ borrow later used here
+
+error: aborting due to previous error; 1 warning emitted
+
+</code></pre>
+<p>Clearly in this example, since <code>my_variable</code> goes out of scope before <code>my_reference</code>,
+it's possible that the <code>if let</code> could try and access <code>my_reference</code>, and find that
+it's referencing a variable that no longer exists.</p>
+<p>Rust says that this variable &quot;does not live long enough&quot;. It notices that
+&quot;it's possible that <code>my_variable</code> is dropped before the reference stored in <code>my_reference</code>&quot;.</p>
+<p>Formally, we can see this by noticing the regions of code where these two
+things need to exist. The region of code where the reference needs to exist
+is <em>larger</em> than the region of code where the variable exists. This indicates
+that there must be part of the time the reference exists where the variable
+has been dropped, and therefore a dangling reference might exist.</p>
+<p>We call a region of code where a reference must be valid a &quot;lifetime&quot;. We can
+give lifetimes names using the syntax <code>'name</code>. So let us say that <code>'variable</code>
+is the region of code where a reference to the variable is valid.
+Also, let's say that <code>'reference</code> is the region of code where the reference
+could be used. We can formally say that <code>'variable</code> must be larger than <code>'reference</code>.</p>
+<p>This is obviously true, it is a shorthand for saying &quot;the region of code where the reference is valid
+must be larger than the region of code where the reference is actually usable&quot;. Consider
+the opposite: if the reference was usable somewhere where the reference wasn't valid, you'd
+have something that was <em>invalid</em>: unsound code, or in other words, a bug.</p>
+<h2 id="so-whats-this-book-about-then"><a class="header" href="#so-whats-this-book-about-then">So what's this book about then?</a></h2>
+<p>There are places where the Rust compiler is unable to figure out lifetimes, and
+needs the programmer to explicitly specify this. This book is to help you
+improve at writing explicit lifetimes (things like <code>&amp;'a str</code>). And that starts
+with the next chapter!</p>
+<h2 id="exercise-complete-the-rustlings-exercises-on-lifetimes"><a class="header" href="#exercise-complete-the-rustlings-exercises-on-lifetimes">Exercise: Complete the Rustlings Exercises on Lifetimes</a></h2>
+<p>If you aren't sure you understand the above, before reading on,
+<a href="https://github.com/rust-lang/rustlings/tree/main/exercises/16_lifetimes">complete the rustlings exercises about lifetimes</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-are-lifetime-annotations"><a class="header" href="#what-are-lifetime-annotations">What are Lifetime Annotations?</a></h1>
+<p>In the last section, we discussed the concept of lifetimes within a single function. In all those examples,
+it was clear what region of code of a variable or reference existed in, based on the curly brackets.
+Lifetime Annotations are used to help the compiler understand what's going on when it can't rely on scope
+brackets (i.e. across function boundaries; and within structs and enums).</p>
+<p>A good place to understand lifetime annotations is to start by
+understanding why we actually need them. Let's work through some examples to see
+why they exist:</p>
+<p>The simplest possible example of a function that needs you to be explicit about
+lifetimes is this one, which returns a reference to the larger of two integers.</p>
+<pre><code class="language-rust ignore">fn max_of_refs(a: &amp;i32, b: &amp;i32) -&gt; &amp;i32 {
+    if *a &gt; *b {
+        a
+    } else {
+        b
+    }
+}</code></pre>
+<p>Imagine we call this function as follows:</p>
+<pre><code class="language-rust ignore">fn complex_function(a: &amp;i32) -&gt; &amp;i32 {
+    let b = 2;
+    max_of_refs(a, &amp;b)
+}
+
+fn main() {
+    let a = 1;
+    let my_num = complex_function(&amp;a);
+    println!(&quot;{my_num}&quot;);
+}</code></pre>
+<p>If you work through this example, you will find that my_num would be a reference to a variable
+from <code>complex_function</code> (which no longer exists). In other words, the lifetime of the return
+value of <code>complex_function</code> will be longer than the lifetime of <code>b</code>.</p>
+<p>Now, you might say, &quot;but can't the compiler see at runtime that clearly this program won't work&quot;?
+Well, because we're using constants, yes the compiler probably could tell that this program won't work.</p>
+<p>But what if we said <code>let a = rand::rand()</code> or <code>let b = read_number_from_stdin()</code>?
+It's impossible for a compiler to tell whether this reference should be valid.</p>
+<h2 id="okay-why-cant-we-just-ban-that-case"><a class="header" href="#okay-why-cant-we-just-ban-that-case">Okay, why can't we just ban that case?</a></h2>
+<p>Your next thought might be &quot;OK, surely all references of this type are unsound; lets just disallow them&quot;.
+It would be worth being specific about what this ban is. The simplest ban would be &quot;no references in function parameters&quot;,
+but that might just be a little excessive (and entirely destructive to how useful Rust is).</p>
+<p>A more sensible ban which would cover this case would be: &quot;Any function with
+more than one reference input may not return a reference (or something
+containing a reference)&quot;. This avoids the problem we've seen of being unclear on
+where a reference is coming from. It would ban the above example.</p>
+<p>But, how ergonomic would that be? What if you wanted a function like:</p>
+<pre><code class="language-rust ignore">fn only_if_greater(number: &amp;i32, greater_than: &amp;i32) -&gt; Option&lt;&amp;i32&gt; {
+    if number &gt; greater_than {
+        Some(number)
+    } else {
+        None
+    }
+}</code></pre>
+<p>No matter the way in which you call this function, we <em>always</em> know that if our
+return value is <code>Some</code>, it refers to <code>number</code>. It will never return a reference
+to <code>greater_than</code>.</p>
+<p>A more interesting example of this is a <code>split</code> function, which takes a string,
+and returns a vector of slices of that string, split by some other string.</p>
+<pre><code class="language-rust ignore">fn split(text: &amp;str, delimiter: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
+    let mut last_split = 0;
+    let mut matches: Vec&lt;&amp;str&gt; = vec![];
+    for i in 0..text.len() {
+        if i &lt; last_split {
+            continue
+        }
+        if text[i..].starts_with(delimiter) {
+            matches.push(&amp;text[last_split..i]);
+            last_split = i + delimiter.len(); 
+        }
+    }
+    if last_split &lt; text.len() {
+        matches.push(&amp;text[last_split..]);
+    }
+    
+    matches
+}</code></pre>
+<p>No matter how you call this function, it will always return a vector of slices from <code>text</code>,
+never from <code>delimiter</code>.</p>
+<h2 id="ugh-but-cant-the-compiler-just-figure-this-out"><a class="header" href="#ugh-but-cant-the-compiler-just-figure-this-out">Ugh, but can't the compiler just figure this out?</a></h2>
+<p>At this point, you can probably notice that <code>matches.push</code> is only ever called with <code>text</code> slices.
+So you might reasonably expect that the compiler could infer lifetimes automatically in this case.</p>
+<p>It's possible that in simple cases it could. But your compiler might decide that it can't infer
+lifetimes. Or it could succeed in inferring them... after 6 months.</p>
+<p>So, the compiler needs more information. That information is provided by lifetime annotations.
+Before we discuss them in detail, here is an exercise that will hopefully re-inforce the concepts,
+before we deal with syntax.</p>
+<h2 id="exercise-identify-which-programs-work-and-which-break"><a class="header" href="#exercise-identify-which-programs-work-and-which-break">Exercise: Identify which programs work, and which break</a></h2>
+<p>Without using any lifetime syntax, answer the following questions for each of the code examples:</p>
+<ol>
+<li>Which inputs are references? Which could the function return?</li>
+<li>Which examples could have dangling references?</li>
+</ol>
+<p>NOTE: the code examples do not compile; you will need to read them and think about them.</p>
+<p>Once you've decided your answers, the &quot;eyeball&quot; button in the top-right hand
+corner of the code block will reveal the answers.</p>
+<pre><code class="language-rust ignore">
+<span class="boring">// a is the only input reference.
+</span><span class="boring">// the only thing the function can return is a
+</span>fn identity(a: &amp;i32) -&gt; &amp;i32 {
+    a
+}
+
+<span class="boring">// This does not have any dangling references.
+</span>fn example_1() {
+    let x = 4;
+    let x_ref = identity(&amp;x);
+    assert_eq!(*x_ref, 4);
+}
+
+<span class="boring">// This is always going to cause a dangling reference.
+</span>fn example_2() {
+    let mut x_ref: Option&lt;&amp;i32&gt; = None;
+    {
+        let x = 7;
+        x_ref = Some(identity(&amp;x));
+    }
+    assert_eq!(*x_ref.unwrap(), 7);
+}</code></pre>
+<pre><code class="language-rust ignore"><span class="boring">// the contents of `opt` and `otherwise` are both references
+</span><span class="boring">// either of them could be returned.
+</span>fn option_or(opt: Option&lt;&amp;i32&gt;, otherwise: &amp;i32) -&gt; &amp;i32 {
+    opt.unwrap_or(otherwise)
+}
+
+<span class="boring">// No possibility for a dangling reference here.
+</span>fn example_1() {
+    let x = 8;
+    let y = 10;
+    let my_number = Some(&amp;x);
+    assert_eq!(&amp;x, option_or(my_number, &amp;y));
+}
+
+<span class="boring">// This is always a dangling reference.
+</span>fn example_2() {
+    let answer = {
+        let y = 4;
+        option_or(None, &amp;y)
+    };
+    assert_eq!(answer, &amp;4);
+}
+
+<span class="boring">// This is never a dangling reference.
+</span>fn example_3() {
+    let y = 4;
+    let answer = {
+        option_or(None, &amp;y)
+    };
+    assert_eq!(answer, &amp;4);
+}
+
+<span class="boring">// This is always a dangling reference.
+</span>fn example_4() {
+    let y = 4;
+    let answer = {
+        let x = 7;
+        option_or(Some(&amp;x), &amp;y)
+    };
+    assert_eq!(answer, &amp;7);
+}</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="lifetimes-the-solution-to-dangling-references"><a class="header" href="#lifetimes-the-solution-to-dangling-references">Lifetimes: The Solution to Dangling References</a></h1>
+<p>What we can see here is that dangling references are caused by functions losing
+information about where references come from.</p>
+<p>The compiler can only decide if the function is correct if it
+knows how the lifetimes of its inputs and outputs interact.
+So, we need to tell the compiler when lifetimes of inputs and
+outputs will be the same.</p>
+<p>What we can do is tell the computer &quot;my function works for any lifetimes,
+as long as the lifetimes of these inputs/outputs are the same&quot;.
+Let's take a look at the syntax of this:</p>
+<pre><pre class="playground"><code class="language-rust">fn some_if_greater&lt;'lifetime1, 'lifetime2&gt;(number: &amp;'lifetime1 i32, greater_than: &amp;'lifetime2 i32) -&gt; Option&lt;&amp;'lifetime1 i32&gt; {
+    if number &gt; greater_than {
+        Some(number)
+    } else {
+        None
+    }
+}
+<span class="boring">fn main() {
+</span><span class="boring">    let (n, gt) = (7, 4);
+</span><span class="boring">    let test = some_if_greater(&amp;n, &amp;gt);
+</span><span class="boring">}</span></code></pre></pre>
+<p>Let's walk through what this does:</p>
+<ul>
+<li><code>fn my_function&lt;'lifetime1, 'lifetime2&gt;(...)</code>: what we're doing here
+is choosing some names for the lifetimes our program requires.</li>
+<li><code>number: &amp;'lifetime1 i32</code>: this is us telling the compiler that
+this reference must live for some region of code called <code>'lifetime1</code>.</li>
+<li><code>greater_than: &amp;'lifetime2 i32</code>: this is us telling the compiler that
+this reference must live for some region of code called <code>'lifetime2</code>.
+This means that the lifetimes of <code>greater_than</code> and <code>number</code> don't
+have to relate at all.</li>
+<li><code>-&gt; Option&lt;&amp;'lifetime1 i32&gt;</code>: this is where lifetimes are important.
+what we're saying is that <code>number</code> and our return value must be
+valid for exactly the same region of code. </li>
+</ul>
+<p>So, what we've done is told the compiler that our function can only be called
+if <code>number</code> and the return are valid in the same region of code.</p>
+<h1 id="exercise-annotate-lifetimes"><a class="header" href="#exercise-annotate-lifetimes">Exercise: Annotate lifetimes</a></h1>
+<p>Just to get some initial practice, the exercise in this section is to annotate lifetimes on some of the examples of the last two chapters.</p>
+<p>You will need to:</p>
+<ul>
+<li>decide how many lifetime parameters are necessary</li>
+<li>name each of those lifetime parameters, and put them inside <code>&lt;</code> angle brackets <code>&gt;</code> after the function's name. </li>
+<li>annotate every reference with the appropriate lifetime</li>
+<li>check the code compiles</li>
+<li>think about what region of code each lifetime could be</li>
+</ul>
+<p>You will notice each function has the <code>#[lifetimes_required(!)]</code> annotation. You will need
+to leave it there to complete this exercise. This instructs the compiler to throw an
+error whenever you miss a lifetime; even if the compiler doesn't need the lifetime.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="why-lifetime-annotations-are-mostly-never-used"><a class="header" href="#why-lifetime-annotations-are-mostly-never-used">Why Lifetime Annotations Are Mostly Never Used</a></h1>
+<p>In the last chapter, we saw why we needed lifetimes. We saw that the compiler
+was unable to automatically tell how references in the arguments or return
+values might relate to each other. This is why we needed to tell the compiler
+that the references related to each other.</p>
+<p>This said, you've probably written a function in Rust that needed a reference
+(likely a <code>&amp;str</code>), without writing lifetimes. Why didn't you have to annotate
+lifetimes then? There are some common patterns in Rust that make it obvious to
+the compiler what the lifetimes should be. Let's explore some of them:</p>
+<h2 id="example-1-no-output-references"><a class="header" href="#example-1-no-output-references">Example 1: No Output References</a></h2>
+<pre><pre class="playground"><code class="language-rust">fn add(a: &amp;i32, b: &amp;i32) -&gt; i32 {
+    *a + *b
+}
+
+<span class="boring">fn main() {
+</span><span class="boring">    assert_eq!(add(&amp;3, &amp;4), 7);
+</span><span class="boring">}</span></code></pre></pre>
+<p>The lifetimes of <code>a</code> and <code>b</code> in this function don't need to relate to each other. Assuming there's only one thread,
+and assuming safe code, there's no way that the variable they are referencing could possibly be dropped during the
+function, and after the function, they can live for as long as they like.</p>
+<h2 id="example-2-only-one-reference-in-the-input"><a class="header" href="#example-2-only-one-reference-in-the-input">Example 2: Only one reference in the input</a></h2>
+<pre><pre class="playground"><code class="language-rust">fn identity(a: &amp;i32) -&gt; &amp;i32 {
+    a
+}
+
+<span class="boring">fn main() {
+</span><span class="boring">    let x = 52;
+</span><span class="boring">    assert_eq!(&amp;x, identity(&amp;x));
+</span><span class="boring">}</span></code></pre></pre>
+<p>It's important to note that it (generally
+<sup><a name="to-footnote-1"><a href="chapter_3.html#footnote-1">1</a></a></sup>
+) isn't possible to create a reference and pass it out of a
+function if it wasn't given to you. This is because a reference must refer
+to something you own. Anything you own is dropped at the end of your function.
+Therefore, anything you own can't be referenced; and the only way you can return a reference
+is if you were passed a reference.</p>
+<p>For this reason, if you only have one reference in your parameters, the only reference you
+could return is that one -- so the lifetime of your parameter has to be the same as
+the reference you return.</p>
+<h1 id="what-to-do"><a class="header" href="#what-to-do">What to do</a></h1>
+<p>Rust could have specifically encoded these examples as exceptions; but then
+there may have been many cases which were excepted and they would have
+ended up with confusing rules.</p>
+<p>Instead, the Rust project has settled on a procedure the compiler will follow to try and guess lifetimes.</p>
+<p>The compiler first splits all the references in a function signature into two types: 'input' and 'output'.
+'Input' references are those in the parameters of the function (i.e. it's arguments). 'Output' references
+are those in the return type of the function.</p>
+<p>The two rules that we'll learn in this chapter are:</p>
+<ol>
+<li>Each place that an input lifetime is left out (a.k.a 'elided') is filled in with its own lifetime.</li>
+<li>If there's exactly one lifetime on all the input references, that lifetime is assigned to <em>every</em> output lifetime.</li>
+</ol>
+<p>Let's see how those rules affect the above two examples, and an example from the last chapter:</p>
+<h2 id="example-1-no-output-references-1"><a class="header" href="#example-1-no-output-references-1">Example 1: No Output References</a></h2>
+<p>We had:</p>
+<pre><code class="language-rust ignore">fn add(a: &amp;mut i32, b: &amp;mut i32) -&gt; i32 {
+    *a + *b
+}</code></pre>
+<p>There are two input lifetimes, the ones needed in the types of <code>a</code> and <code>b</code>. Each get allocated their own lifetime:</p>
+<pre><pre class="playground"><code class="language-rust">fn add&lt;'elided1, 'elided2&gt;(a: &amp;'elided1 i32, b: &amp;'elided2 i32) -&gt; i32 {
+    *a + *b
+}
+
+<span class="boring">fn main() {
+</span><span class="boring">    assert_eq!(add(&amp;3, &amp;4), 7);
+</span><span class="boring">}</span></code></pre></pre>
+<p>There are no output lifetimes, so we end there.</p>
+<p>This example is now correct -- the two lifetimes of <code>a</code> and <code>b</code> can be entirely unrelated;
+and the output is an owned value, so it doesn't depend on any lifetimes at all.</p>
+<h2 id="example-2-only-one-reference-in-the-input-1"><a class="header" href="#example-2-only-one-reference-in-the-input-1">Example 2: Only one reference in the input</a></h2>
+<p>We had:</p>
+<pre><pre class="playground"><code class="language-rust">fn identity(a: &amp;i32) -&gt; &amp;i32 {
+    a
+}
+
+<span class="boring">fn main() {
+</span><span class="boring">    let x = 52;
+</span><span class="boring">    assert_eq!(&amp;x, identity(&amp;x));
+</span><span class="boring">}</span></code></pre></pre>
+<p>There is only one input lifetime (needed for the type of <code>a</code>):</p>
+<pre><pre class="playground"><code class="language-rust">fn identity&lt;'elided1&gt;(a: &amp;'elided1 i32) -&gt; &amp;i32 {
+    a
+}
+
+<span class="boring">fn main() {
+</span><span class="boring">    let x = 52;
+</span><span class="boring">    assert_eq!(&amp;x, identity(&amp;x));
+</span><span class="boring">}</span></code></pre></pre>
+<p>There is only one output lifetime; and all the input lifetimes share the same lifetime (<code>'elided1</code>);
+therefore we can allocate all output lifetimes that lifetime:</p>
+<pre><pre class="playground"><code class="language-rust">fn identity&lt;'elided1&gt;(a: &amp;'elided1 i32) -&gt; &amp;'elided1 i32 {
+    a
+}
+
+<span class="boring">fn main() {
+</span><span class="boring">    let x = 52;
+</span><span class="boring">    assert_eq!(&amp;x, identity(&amp;x));
+</span><span class="boring">}</span></code></pre></pre>
+<p>This now makes sense: the only possible way you could return a <code>&amp;i32</code> is if you got it from a parameter;
+and we can see that the input and output share a lifetime.</p>
+<h2 id="example-3-the-limits-of-elision"><a class="header" href="#example-3-the-limits-of-elision">Example 3: The Limits of Elision</a></h2>
+<p>Let's have another look at this example from the last chapter.</p>
+<pre><code class="language-rust ignore">fn max_of_refs(a: &amp;i32, b: &amp;i32) -&gt; &amp;i32 {
+    if *a &gt; *b {
+        a
+    } else {
+        b
+    }
+}</code></pre>
+<p>Just like Example 1, there are two input lifetimes, so we give them
+distinct lifetimes:</p>
+<pre><code class="language-rust ignore">fn max_of_refs&lt;'elided1, 'elided2&gt;(a: &amp;'elided1 i32, b: &amp;'elided2 i32) -&gt; &amp;i32 {
+    if *a &gt; *b {
+        a
+    } else {
+        b
+    }
+}</code></pre>
+<p>But unlike Example 1, we need an output lifetime! By the second rule, we can
+only elide the output lifetime if we have exactly one input lifetime. Therefore,
+Rust considers it an error to elide lifetimes here -- the user has to give more
+information!</p>
+<h2 id="exercise-apply-these-rules"><a class="header" href="#exercise-apply-these-rules">Exercise: Apply These Rules</a></h2>
+<p>In this exercise, there are four functions which are missing some lifetime annotations.
+Your task is to manually follow the lifetime elision rules, and give these
+functions lifetimes in the same way that the compiler would.</p>
+<p>In a future release of lifetimekata, these will be checked automatically.
+For now, when you're done, compare your answer to the solutions.</p>
+<p><hr/>
+<p><a name="footnote-1"><a href="chapter_3.html#to-footnote-1">1</a></a>: this is possible with static types, like string literals, but we'll cover those later</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="mutable-references-and-containers"><a class="header" href="#mutable-references-and-containers">Mutable References and Containers</a></h1>
+<p>Mutable References work exactly the same way as regular references, with regards
+to lifetime elision. The reason we have a chapter about them, however, is that if
+you have a mutable reference, you might need to tell the compiler about lifetimes
+even without a return value.</p>
+<p>For example, let's take a look at this example:</p>
+<pre><code class="language-rust ignore">fn insert_value(my_vec: &amp;mut Vec&lt;&amp;i32&gt;, value: &amp;i32) {
+    my_vec.push(value);
+}</code></pre>
+<p>We're not returning anything; so lifetimes don't matter, right?</p>
+<p>Unfortunately, lifetimes are still important. The reference <code>value</code> actually needs to
+live for the same time as the contents of the vector. If they didn't,
+the vector might contain an invalid reference. For example, what would happen
+in this scenario?</p>
+<pre><code class="language-rust ignore">fn insert_value(my_vec: &amp;mut Vec&lt;&amp;i32&gt;, value: &amp;i32) {
+    my_vec.push(value);
+}
+
+fn main() {
+    let x = 1;
+    let my_vec = vec![&amp;x];
+    {
+        let y = 2;
+        insert_value(&amp;mut my_vec, &amp;y);
+    }
+    println!(&quot;{my_vec:?}&quot;);
+}</code></pre>
+<p>The reference to <code>y</code> in the above example is dangling when we try to print the vector!</p>
+<p>We can use lifetimes to ensure that the two references live for the same amount of time:</p>
+<pre><pre class="playground"><code class="language-rust">fn insert_value&lt;'vec_lifetime, 'contents_lifetime&gt;(my_vec: &amp;'vec_lifetime mut Vec&lt;&amp;'contents_lifetime i32&gt;, value: &amp;'contents_lifetime i32) {
+    my_vec.push(value)
+}
+fn main(){
+    let mut my_vec = vec![];
+    let val1 = 1;
+    let val2 = 2;
+    
+    insert_value(&amp;mut my_vec, &amp;val1);
+    insert_value(&amp;mut my_vec, &amp;val2);
+    
+    println!(&quot;{my_vec:?}&quot;);
+}</code></pre></pre>
+<p>This signature indicates that there are two lifetimes:</p>
+<ul>
+<li><code>'vec_lifetime</code>: The vector we've passed the function will need to live
+for a certain period of time.</li>
+<li><code>'contents_lifetime</code>: The contents of the vector need to live for a certain
+period of time. Importantly, the new <code>value</code> we're inserting needs to live
+for just as long as the contents of the vector. If they didn't, you would
+end up with a vector that contains an invalid reference.</li>
+</ul>
+<h2 id="do-we-even-need-two-lifetimes"><a class="header" href="#do-we-even-need-two-lifetimes">Do We Even Need Two Lifetimes?</a></h2>
+<p>You might wonder what happens if we don't provide two lifetimes. Does just
+one lifetime work?</p>
+<pre><code class="language-rust ignore">fn insert_value&lt;'one_lifetime&gt;(my_vec: &amp;'one_lifetime mut Vec&lt;&amp;'one_lifetime i32&gt;, value: &amp;'one_lifetime i32) {
+    my_vec.push(value)
+}
+
+fn main(){
+    let mut my_vec: Vec&lt;&amp;i32&gt; = vec![];
+    let val1 = 1;
+    let val2 = 2;
+    
+    insert_value(&amp;mut my_vec, &amp;val1);
+    insert_value(&amp;mut my_vec, &amp;val2);
+    
+    println!(&quot;{my_vec:?}&quot;);
+}</code></pre>
+<p>No, it doesn't. We get two errors. Let's look at the first one:</p>
+<pre><code>error[E0499]: cannot borrow `my_vec` as mutable more than once at a time
+  --&gt; /tmp/rust.rs:11:18
+   |
+10 |     insert_value(&amp;mut my_vec, &amp;val1);
+   |                  ----------- first mutable borrow occurs here
+11 |     insert_value(&amp;mut my_vec, &amp;val2);
+   |                  ^^^^^^^^^^^
+   |                  |
+   |                  second mutable borrow occurs here
+   |                  first borrow later used here
+
+</code></pre>
+<p>This seems strange -- why can't you borrow <code>my_vec</code>?</p>
+<p>Well, let's walk through what the compiler sees:</p>
+<p><code>&amp;val</code> needs to last for as long as <code>my_vec</code> exists:</p>
+<pre><code class="language-rust ignore"><span class="boring">fn insert_value&lt;'one_lifetime&gt;(my_vec: &amp;'one_lifetime mut Vec&lt;&amp;'one_lifetime i32&gt;, value: &amp;'one_lifetime i32) {
+</span><span class="boring">    my_vec.push(value)
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main(){
+</span>    let mut my_vec: Vec&lt;&amp;i32&gt; = vec![];
+    let val1 = 1;
+    let val2 = 2;
+    
+    insert_value(&amp;mut my_vec, &amp;val1); // \
+    insert_value(&amp;mut my_vec, &amp;val2); // | - &amp;val1 needs to last this long.
+                                      // |
+    println!(&quot;{my_vec:?}&quot;);           // /
+<span class="boring">}</span></code></pre>
+<p>Whereas <code>&amp;mut my_vec</code> only needs to last for the duration of <code>insert_value</code>.</p>
+<pre><code class="language-rust ignore"><span class="boring">fn insert_value&lt;'one_lifetime&gt;(my_vec: &amp;'one_lifetime mut Vec&lt;&amp;'one_lifetime i32&gt;, value: &amp;'one_lifetime i32) {
+</span><span class="boring">    my_vec.push(value)
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main(){
+</span>    let mut my_vec: Vec&lt;&amp;i32&gt; = vec![];
+    let val1 = 1;
+    let val2 = 2;
+    
+    insert_value(&amp;mut my_vec, &amp;val1); // &lt;- &amp;mut my_vec only needs to last this long.
+    insert_value(&amp;mut my_vec, &amp;val2); 
+    
+    println!(&quot;{my_vec:?}&quot;);
+<span class="boring">}</span></code></pre>
+<p>But, we've told the compiler that it needs the borrows of both <code>&amp;val1</code> and
+<code>&amp;mut my_vec</code> to share the same lifetime. So the compiler extends the borrow
+of <code>&amp;mut my_vec</code> to ensure they do share a lifetime:
+It sees that if it let <code>&amp;mut my_vec</code> live as long as <code>&amp;val1</code>, it would
+have that single region of code:</p>
+<pre><code class="language-rust ignore"><span class="boring">fn insert_value&lt;'one_lifetime&gt;(my_vec: &amp;'one_lifetime mut Vec&lt;&amp;'one_lifetime i32&gt;, value: &amp;'one_lifetime i32) {
+</span><span class="boring">    my_vec.push(value)
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn main(){
+</span>    let mut my_vec: Vec&lt;&amp;i32&gt; = vec![];
+    let val1 = 1;
+    let val2 = 2;
+    
+    insert_value(&amp;mut my_vec, &amp;val1); // \
+    insert_value(&amp;mut my_vec, &amp;val2); // | - 'one_lifetime must be this region of code.
+                                      // |
+    println!(&quot;{my_vec:?}&quot;);           // /
+<span class="boring">}</span></code></pre>
+<p>And that's fine. But now the compiler gets to the next line, and it sees you're
+trying to borrow <code>&amp;mut my_vec</code> again.</p>
+<p>The compiler already decided <code>&amp;mut my_vec</code> has to exist until the end of the function.
+So now, you're asking it to create <em>two</em> mutable references... and that's not allowed.</p>
+<p>So the compiler throws an error -- you're not allowed to borrow <code>&amp;mut my_vec</code> again.</p>
+<h2 id="why-does-having-two-lifetimes-fix-this-error"><a class="header" href="#why-does-having-two-lifetimes-fix-this-error">Why does having two lifetimes fix this error?</a></h2>
+<p>Have a think before reading this section -- why does having two lifetimes
+solve this bug?</p>
+<p>Before, the compiler had to decide that <code>&amp;mut my_vec</code> and <code>&amp;val1</code> shared a lifetime.
+In other words, that they lived as long as each-other.</p>
+<p>By using two lifetimes, we've told the compiler that <code>&amp;mut my_vec</code> and <code>&amp;val1</code>
+don't necessarily have to live for the same amount of time. And so,
+it finds the following lifetimes:</p>
+<pre><code class="language-rust ignore">fn insert_value&lt;'vec_lifetime, 'contents_lifetime&gt;(my_vec: &amp;'vec_lifetime mut Vec&lt;&amp;'contents_lifetime i32&gt;, value: &amp;'contents_lifetime i32) {
+    my_vec.push(value)
+}
+
+fn main(){
+    let mut my_vec: Vec&lt;&amp;i32&gt; = vec![];
+    let val1 = 1;
+    let val2 = 2;
+    
+    insert_value(&amp;mut my_vec, &amp;val1); // &lt;- 'vec_lifetime \
+    insert_value(&amp;mut my_vec, &amp;val2); //                  | 'contents_lifetime
+                                      //                  |
+    println!(&quot;{my_vec:?}&quot;);           //                  /
+}</code></pre>
+<h2 id="exercise-part-1-the-other-error"><a class="header" href="#exercise-part-1-the-other-error">Exercise Part 1: The Other Error</a></h2>
+<p>First, let's look at the other error we got in the last section:</p>
+<pre><code>error[E0502]: cannot borrow `my_vec` as immutable because it is also borrowed as mutable
+  --&gt; /tmp/rust.rs:13:16
+   |
+10 |     insert_value(&amp;mut my_vec, &amp;val1);
+   |                  ----------- mutable borrow occurs here
+...
+13 |     println!(&quot;{my_vec:?}&quot;);
+   |                ^^^^^^
+   |                |
+   |                immutable borrow occurs here
+   |                mutable borrow later used here
+   |
+</code></pre>
+<p>Can you explain why this error occurs? Write it out in 50 words or less.</p>
+<h2 id="exercise-part-2-writing-our-own"><a class="header" href="#exercise-part-2-writing-our-own">Exercise Part 2: Writing Our Own</a></h2>
+<p>Add appropriate lifetimes to the function in the exercise.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="lifetimes-on-types"><a class="header" href="#lifetimes-on-types">Lifetimes on Types</a></h1>
+<p>So far, we've only discussed lifetimes as applied to functions.
+Functions are not the only place where you will need explicit
+lifetimes. Types (structs and enums) can have lifetimes too.</p>
+<p>This is because if a struct contains a reference, the user needs
+to clarify how long it lasts for.</p>
+<p>Imagine we wanted to split a <code>&amp;str</code> in two, and create a
+struct with a <code>start</code> and <code>end</code> field?</p>
+<p>Well, we could write a function like this:</p>
+<pre><code class="language-rust ignore">struct SplitStr {
+    start: &amp;str,
+    end: &amp;str
+}
+
+fn split&lt;'text, 'delim&gt;(text: &amp;'text str, delimiter: &amp;'delim str) -&gt; Option&lt;SplitStr&gt; {
+    let (start, end) = text.split_once(delimiter)?;
+    
+    Some(SplitStr {
+        start,
+        end
+    })
+}
+
+<span class="boring">fn main() {}</span></code></pre>
+<p>And we're done! Right?</p>
+<p>Well, how long do those string references live?</p>
+<p>What if we called the function like this:</p>
+<pre><code class="language-rust ignore"><span class="boring">struct SplitStr {
+</span><span class="boring">    start: &amp;str,
+</span><span class="boring">    end: &amp;str
+</span><span class="boring">}
+</span><span class="boring">
+</span><span class="boring">fn split&lt;'text, 'delim&gt;(text: &amp;'text str, delimiter: &amp;'delim str) -&gt; Option&lt;SplitStr&gt; {
+</span><span class="boring">    let (start, end) = text.split_once(delimiter)?;
+</span><span class="boring">    
+</span><span class="boring">    Some(SplitStr {
+</span><span class="boring">        start,
+</span><span class="boring">        end
+</span><span class="boring">    })
+</span><span class="boring">}
+</span>
+fn main() {
+    let mut parts_of_string: Option&lt;SplitStr&gt; = None;
+    {
+        let my_string = String::from(&quot;First line;Second line&quot;);
+        parts_of_string = split(&amp;my_string, &quot;;&quot;);
+    }
+    
+    println!(&quot;{parts_of_string:?}&quot;);
+}</code></pre>
+<p>Well, the references inside the <code>SplitStr</code> struct are now dangling,
+since they both pointed to <code>my_string</code>; but that only existed inside the curly brackets.</p>
+<p>So, Rust forces us to specify the lifetime of all references inside a struct.
+Here's how we'd fix our code:</p>
+<pre><pre class="playground"><code class="language-rust">struct SplitStr&lt;'str_lifetime&gt; {
+    start: &amp;'str_lifetime str,
+    end: &amp;'str_lifetime str
+}
+
+fn split&lt;'text, 'delim&gt;(text: &amp;'text str, delimiter: &amp;'delim str) -&gt; Option&lt;SplitStr&lt;'text&gt;&gt; {
+    let (start, end) = text.split_once(delimiter)?;
+    
+    Some(SplitStr {
+        start,
+        end
+    })
+}
+
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>Now, when we return an <code>Option&lt;SplitStr&lt;'text&gt;&gt;</code> the compiler knows that references inside the struct
+must all last for the same lifetime as <code>'text</code>. If we try to return a <code>SplitStr</code> where the references
+can't last for <code>'text</code>, that will be a compiler error.</p>
+<h2 id="a-note-on-enums"><a class="header" href="#a-note-on-enums">A Note on Enums</a></h2>
+<p>References work exactly the same way in enums as they do in structs.
+We don't go into detail on them here because they are interchangeable.</p>
+<pre><pre class="playground"><code class="language-rust">enum StringOption&lt;'a&gt; {
+    Some(&amp;'a str),
+    None
+}
+<span class="boring">fn main() {}</span></code></pre></pre>
+<h2 id="two-lifetimes"><a class="header" href="#two-lifetimes">Two Lifetimes</a></h2>
+<p>Occasionally, structs will have more than one lifetime on them.
+This happens when the data inside them comes from two different places,
+with two lifetimes.</p>
+<p>Take the example of a program to find unique words among two sentences.</p>
+<p>You might have the first sentence be <code>&quot;I love to swim and surf.&quot;</code>, and the
+second be <code>&quot;I love to ski and snowboard.&quot;</code>. The words unique to the first
+sentence are <code>&quot;swim&quot;</code> and <code>&quot;surf&quot;</code>. The words unique to the second sentence are
+<code>&quot;ski&quot;</code> and <code>&quot;snowboard&quot;</code>.</p>
+<p>If you said that the two sentences had to share a lifetime, you would
+be forcing the user to ensure that the two sentences came from the same
+place, and therefore had the same lifetime. But what if one came from a file that
+was open for the whole running of the program, but the second was scanned in
+inside a loop?</p>
+<p>In that case, the compiler would insist that the scanned in value was saved for
+the whole of the program, which would not be ergonomic.</p>
+<h2 id="exercise-two-lifetimes-on-a-struct"><a class="header" href="#exercise-two-lifetimes-on-a-struct">Exercise: Two Lifetimes on a Struct</a></h2>
+<p>In this exercise, we will be modifying a small program which finds the unique
+words between two strings. At the moment, it does not have any lifetime
+annotations, and therefore does not compile.</p>
+<p>Our goal is to return a struct that contains all the unique words from the
+first string, and all the unique words from the second string. They should
+have separate lifetimes.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="lifetimes-on-impls"><a class="header" href="#lifetimes-on-impls">Lifetimes on Impls</a></h1>
+<p>When structs or enums have lifetimes on them, the way that <code>impl</code> blocks
+work also changes slightly.</p>
+<p>For example, say we want to create a struct which lets the user
+iterate over a sentence. You might start off something like this:</p>
+<pre><code class="language-rust ignore">// First, the struct:
+
+/// This struct keeps track of where we're up to in the string.
+struct WordIterator&lt;'s&gt; {
+    position: usize,
+    string: &amp;'s str
+}
+
+impl WordIterator {
+    /// Creates a new WordIterator based on a string.
+    fn new(string: &amp;str) -&gt; WordIterator {
+        WordIterator {
+            position: 0,
+            string
+        }
+    }
+    
+    /// Gives the next word. `None` if there aren't any words left.
+    fn next_word(&amp;mut self) -&gt; Option&lt;&amp;str&gt; {
+        let start_of_word = &amp;self.string[self.position..];
+        let index_of_next_space = start_of_word.find(' ').unwrap_or(start_of_word.len());
+        if start_of_word.len() != 0 {
+            self.position += index_of_next_space + 1;
+            Some(&amp;start_of_word[..index_of_next_space]) 
+        } else {
+            None
+        }
+    }
+}
+
+fn main() {
+    let text = String::from(&quot;Twas brillig, and the slithy toves // Did gyre and gimble in the wabe: // All mimsy were the borogoves, // And the mome raths outgrabe. &quot;);
+    let mut word_iterator = WordIterator::new(&amp;text);
+    
+    assert_eq!(word_iterator.next_word(), Some(&quot;Twas&quot;));
+    assert_eq!(word_iterator.next_word(), Some(&quot;brillig,&quot;));
+    
+}</code></pre>
+<p>When defining our <code>WordIterator</code> struct, we said it requires a lifetime to be specified.
+But when we then wrote the impl block, we didn't specify one. Rust requires that we do this.</p>
+<p>The way we do this is by telling Rust about a lifetime, and then putting that lifetime onto
+our struct. Let's see how we do that:</p>
+<pre><code class="language-rust ignore">impl&lt;'lifetime&gt; for WordIterator&lt;'lifetime&gt; {
+    // ...
+}</code></pre>
+<p>It's useful to note that we've done this in two parts -- <code>impl&lt;'lifetime&gt;</code> defines a lifetime <code>'lifetime</code>.
+It doesn't make any promises about what that lifetime is, it just says it exists.
+<code>WordIterator&lt;'lifetime&gt;</code> then uses the lifetime we created, and says &quot;the references in <code>WordIterator</code> must live for <code>lifetime</code>&quot;.</p>
+<p>Now, anywhere in the impl block, we can choose to use that lifetime. Any reference we annotate with <code>'lifetime'</code>
+must have the same lifetime as any other reference annotated with <code>'lifetime'</code>.</p>
+<pre><code class="language-rust ignore"><span class="boring">/// This struct keeps track of where we're up to in the string.
+</span><span class="boring">struct WordIterator&lt;'s&gt; {
+</span><span class="boring">    position: usize,
+</span><span class="boring">    string: &amp;'s str
+</span><span class="boring">}
+</span>
+impl&lt;'lifetime&gt; WordIterator&lt;'lifetime&gt; {
+    /// Creates a new WordIterator based on a string.
+    fn new(string: &amp;'lifetime str) -&gt; WordIterator&lt;'lifetime&gt; {
+        WordIterator {
+            position: 0,
+            string
+        }
+    }
+    
+    /// Gives the next word. `None` if there aren't any words left.
+    fn next_word(&amp;mut self) -&gt; Option&lt;&amp;str&gt; {
+        let start_of_word = &amp;self.string[self.position..];
+        let index_of_next_space = start_of_word.find(' ').unwrap_or(start_of_word.len());
+        if start_of_word.len() != 0 {
+            self.position += index_of_next_space + 1;
+            Some(&amp;start_of_word[..index_of_next_space]) 
+        } else {
+            None
+        }
+    }
+}
+
+<span class="boring">fn main() {
+</span><span class="boring">    let text = String::from(&quot;Twas brillig, and the slithy toves // Did gyre and gimble in the wabe: // All mimsy were the borogoves, // And the mome raths outgrabe. &quot;);
+</span><span class="boring">    let mut word_iterator = WordIterator::new(&amp;text);
+</span><span class="boring">    
+</span><span class="boring">    assert_eq!(word_iterator.next_word(), Some(&quot;Twas&quot;));
+</span><span class="boring">    assert_eq!(word_iterator.next_word(), Some(&quot;brillig,&quot;));
+</span><span class="boring">    
+</span><span class="boring">}
+</span></code></pre>
+<h2 id="lifetime-elision-redux"><a class="header" href="#lifetime-elision-redux">Lifetime Elision, Redux</a></h2>
+<p>We previously discussed two rules for lifetime elision. They are:</p>
+<ol>
+<li>Each place that an input lifetime is left out (a.k.a 'elided') is filled in with its own lifetime.</li>
+<li>If there's exactly one lifetime on all the input references, that lifetime is assigned to <em>every</em> output lifetime.</li>
+</ol>
+<p>Now that we've seen <code>impl</code> blocks that have lifetimes, let's discuss one more:</p>
+<ol start="3">
+<li>If there are multiple input lifetime positions, but one of them is <code>&amp;self</code> or
+<code>&amp;mut self</code>, the lifetime of the borrow of <code>self</code> is assigned to all elided output lifetimes.</li>
+</ol>
+<p>This means that even if you take in many references in your arguments, Rust will assume that any references you return
+come from <code>self</code>, not any of those other references.</p>
+<h1 id="exercise"><a class="header" href="#exercise">Exercise</a></h1>
+<p>In the following code, we annotate the function using the <code>'borrow</code> lifetime, not only the <code>'lifetime</code> lifetime.
+The <code>'borrow</code> lifetime only exists inside this function, and only affects the borrows of its arguments and return
+value. The <code>'lifetime</code> value, as we saw before, also constrains the lifetime of the string inside the struct.</p>
+<p>There are four ways we could implement this code. Describe the effect of each of these implementations.</p>
+<p>Specifically:</p>
+<ul>
+<li>Do they compile?</li>
+<li>Are any of them identical to another one?</li>
+<li>Are there any circumstances where their lifetimes are not general enough?</li>
+<li>Which would be the &quot;most&quot; correct to write?</li>
+</ul>
+<h3 id="example-1"><a class="header" href="#example-1">Example 1</a></h3>
+<pre><code class="language-rust ignore">    /// Gives the next word. `None` if there aren't any words left.
+<span class="boring">   /// This compiles. It's the exact same as Example 4.
+</span><span class="boring">   /// This function is problematic because the next word lives as long
+</span><span class="boring">   /// as your borrow of the iterator. In order to get the next word, you
+</span><span class="boring">   /// must drop all references to the current one.
+</span>    fn next_word&lt;'borrow&gt;(&amp;'borrow mut self) -&gt; Option&lt;&amp;'borrow str&gt; {
+        // ...
+    }</code></pre>
+<h3 id="example-2"><a class="header" href="#example-2">Example 2</a></h3>
+<pre><code class="language-rust ignore">    /// Gives the next word. `None` if there aren't any words left.
+<span class="boring">   /// This compiles. It's the exact same as Example 3.
+</span>    fn next_word&lt;'borrow&gt;(&amp;'borrow mut self) -&gt; Option&lt;&amp;'lifetime str&gt; {
+        // ...
+    }</code></pre>
+<h3 id="example-3"><a class="header" href="#example-3">Example 3</a></h3>
+<pre><code class="language-rust ignore">    /// Gives the next word. `None` if there aren't any words left.
+<span class="boring">   /// This compiles. It's probably the &quot;most&quot; correct, because it's the shortest
+</span><span class="boring">   /// to write, but also ensures you can retain the returned strings, even if
+</span><span class="boring">   /// you call this function multiple times.
+</span>    fn next_word(&amp;mut self) -&gt; Option&lt;&amp;'lifetime str&gt; {
+        // ...
+    }</code></pre>
+<h3 id="example-4"><a class="header" href="#example-4">Example 4</a></h3>
+<pre><code class="language-rust ignore">    /// Gives the next word. `None` if there aren't any words left.
+<span class="boring">   /// This compiles. If expanded, it would be the same as Example 1.
+</span>    fn next_word(&amp;mut self) -&gt; Option&lt;&amp;str&gt; {
+        // ...
+    }</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="special-lifetimes-and-bounds"><a class="header" href="#special-lifetimes-and-bounds">Special Lifetimes and Bounds</a></h1>
+<p>There are two special lifetimes in Rust. It's worth discussing them both:</p>
+<ul>
+<li><code>'static</code></li>
+<li><code>'_</code> (the implicit lifetime)</li>
+</ul>
+<h1 id="the-static-lifetime"><a class="header" href="#the-static-lifetime">The <code>static</code> lifetime</a></h1>
+<p>Some things in your program are guaranteed to last forever. The most common reason for this
+is when they're information bundled inside your binary. For example, when you write
+a program like this:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let my_text = &quot;Hello World&quot;;
+}</code></pre></pre>
+<p>The text <code>&quot;Hello World&quot;</code> is actually somewhere inside the compiled binary. This means that
+the reference to it is always valid, since the text is always there as long as the program
+is running.</p>
+<p>Therefore, if we were to talk about the type of the text, we'd say it's a <code>&amp;'static str</code>.</p>
+<p>Similarly, any references to a constant can also be <code>&amp;'static</code>. For example:</p>
+<pre><pre class="playground"><code class="language-rust">
+const SOME_COORDINATE: (i32, i32) = (7, 4);
+
+fn main() {
+    let static_reference: &amp;'static (i32, i32) = &amp;SOME_COORDINATE;
+}</code></pre></pre>
+<h1 id="the-_-lifetime-anonymous-lifetimes-placeholder-lifetimes"><a class="header" href="#the-_-lifetime-anonymous-lifetimes-placeholder-lifetimes">The <code>'_</code> lifetime (Anonymous Lifetimes, Placeholder Lifetimes)</a></h1>
+<p>The implicit lifetime tells Rust to figure out the lifetime
+itself. There are three places where this lifetime is useful:</p>
+<ul>
+<li>To simplify <code>impl</code> blocks</li>
+<li>When consuming/returning a type that needs a lifetime</li>
+<li>To write trait objects that contain references.</li>
+</ul>
+<h2 id="simplifying-impl-blocks"><a class="header" href="#simplifying-impl-blocks">Simplifying Impl Blocks</a></h2>
+<p>Say you're implementing a counter struct, that looks like this:</p>
+<pre><pre class="playground"><code class="language-rust">struct Counter&lt;'a&gt; {
+    counter: &amp;'a mut i32
+}
+
+impl&lt;'a&gt; Counter&lt;'a&gt; {
+    fn increment(&amp;mut self) {
+        *self.counter += 1;
+    }
+}
+
+fn main() {
+    let mut num = 0;
+    
+    let mut counter = Counter { counter: &amp;mut num };
+    counter.increment();
+    
+    println!(&quot;{num}&quot;); // prints 1
+    
+}</code></pre></pre>
+<p>That's fine, but you'll notice that the <code>impl</code> block doesn't actually use the <code>'a</code> lifetime anywhere.
+Therefore, we can simplify things by writing the following instead:</p>
+<pre><code class="language-rust ignore">impl Counter&lt;'_&gt; {
+    fn increment(&amp;mut self) {
+        self.counter += 1;
+    }
+}</code></pre>
+<p>The two <code>impl</code> blocks above mean the same thing, but just take slightly fewer arguments.</p>
+<h2 id="returning-structs-and-enums"><a class="header" href="#returning-structs-and-enums">Returning Structs and Enums</a></h2>
+<p>This is recommended for the situation where you are returning a
+struct/enum that contains a reference. You could write something like this:</p>
+<pre><pre class="playground"><code class="language-rust">
+struct StrWrap&lt;'a&gt;(&amp;'a str);
+
+fn make_wrapper(string: &amp;str) -&gt; StrWrap {
+    StrWrap(string)
+}
+
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>But that syntax is no longer recommended, as you will see when you add the
+<code>#![deny(rust_2018_idioms)]</code> annotation, where you get the error:</p>
+<pre><code class="language-text">error: hidden lifetime parameters in types are deprecated
+ --&gt; src/main.rs:8:34
+  |
+_ | fn make_wrapper(string: &amp;str) -&gt; StrWrap {
+  |                                  ^^^^^^^ expected lifetime parameter
+  |
+note: the lint level is defined here
+ --&gt; src/main.rs:1:9
+  |
+_ | #![deny(rust_2018_idioms)]
+  |         ^^^^^^^^^^^^^^^^
+  = note: `#[deny(elided_lifetimes_in_paths)]` implied by `#[deny(rust_2018_idioms)]`
+help: indicate the anonymous lifetime
+  |
+_ | fn make_wrapper(string: &amp;str) -&gt; StrWrap&lt;'_&gt; {
+  |                                         ++++
+</code></pre>
+<p>By following the hint, it becomes clearer that <code>StrWrap</code> <em>does</em> contain a reference,
+but that the compiler should just figure it out.</p>
+<h2 id="lifetimes-on-trait-objects"><a class="header" href="#lifetimes-on-trait-objects">Lifetimes on Trait Objects</a></h2>
+<p>See <a href="./chapter_10.html">Chapter 10: Footnote on Trait Lifetime Bounds</a> for the gory details.</p>
+<h1 id="lifetime-bounds"><a class="header" href="#lifetime-bounds">Lifetime Bounds</a></h1>
+<p>Lifetime bounds are not widely used, so we don't devote a large section of these exercises to them.
+You can probably skip this section unless you really want to know the details.</p>
+<p>In short, they allow you to specify that one lifetime should outlive another. To specify one, use a where clause, such as 
+<code>where 'a: 'b</code>.</p>
+<p>To quote the Rust Reference: </p>
+<blockquote>
+<p>Lifetime bounds can be applied to types or to other lifetimes.
+The bound <code>'a: 'b</code> is usually read as <code>'a</code> <em>outlives</em> <code>'b</code>.
+<code>'a: 'b</code> means that <code>'a</code> lasts at least as long as <code>'b</code>, so a reference <code>&amp;'a ()</code> is valid whenever <code>&amp;'b ()</code> is valid.</p>
+</blockquote>
+<blockquote>
+<pre><code class="language-rust ignore">fn f&lt;'a, 'b&gt;(x: &amp;'a i32, mut y: &amp;'b i32) where 'a: 'b {
+    y = x;                      // &amp;'a i32 is a subtype of &amp;'b i32 because 'a: 'b
+    let r: &amp;'b &amp;'a i32 = &amp;&amp;0;   // &amp;'b &amp;'a i32 is well formed because 'a: 'b
+}</code></pre>
+</blockquote>
+<blockquote>
+<p><code>T: 'a</code> means that all lifetime parameters of <code>T</code> outlive <code>'a</code>.
+For example, if <code>'a</code> is an unconstrained lifetime parameter, then <code>i32: 'static</code> and <code>&amp;'static str: 'a</code> are satisfied, but <code>Vec&lt;&amp;'a ()&gt;: 'static</code> is not.</p>
+</blockquote>
+<h1 id="exercise-1"><a class="header" href="#exercise-1">Exercise</a></h1>
+<p>You have been given code which contains many uses of the lifetimes <code>'a</code> and <code>'b'</code>.
+All of these lifetimes can be replaced with either <code>'_</code> or <code>'static</code>.</p>
+<p>Your task is to replace every occurance of the lifetimes <code>'a</code> and <code>'b</code> with either
+<code>'_</code> or <code>'static</code>, to remove excessive lifetime declarations, and to ensure your 
+code still compiles.</p>
+<h3 id="footnote-on-out-of-date-information"><a class="header" href="#footnote-on-out-of-date-information">Footnote on Out of Date Information</a></h3>
+<p>The Rust Edition Guide previously contained a section
+about anonymous lifetimes. The most popular google result
+is now <a href="https://yegeun542.github.io/rust-edition-guide-ko/rust-2018/ownership-and-lifetimes/the-anonymous-lifetime.html">this article</a> but I recommend disregarding it, as it is out of date information.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="finale"><a class="header" href="#finale">Finale</a></h1>
+<p>Congratulations on getting to the end of LifetimeKata. There's more footnotes and extra reading
+in the next two chapters, but this chapter is a &quot;finale&quot; of sorts.</p>
+<p>In this exercise, we will be building a very simple clone of a glob system.
+This allows someone to ask whether a piece of text matches some description.</p>
+<p>It's worth noting that implementing the whole thing may take up to an hour. If you just want to work on the lifetimes,
+you can copy code from the <code>solution</code>, but this is a fun
+and rewarding exercise to complete in its entirety.</p>
+<p>For example, the glob <code>ab(cd|ef|gh)</code> matches any of the following strings: <code>abcd</code>, <code>abef</code>, <code>abgh</code></p>
+<p>You will create a <code>Matcher</code> struct, which has three fields:</p>
+<ul>
+<li>A <code>&amp;str</code>, representing the textual representation of our regex.</li>
+<li>A <code>Vec&lt;MatcherTokens&gt;</code>, representing the different parts of the regex, in order.</li>
+<li>An integer, keeping track of what the longest match for our regex was.</li>
+</ul>
+<p>To create this, you'll take a string that looks like this: <code>hello.(town|world|universe).its.me</code>.
+There are three components to this:</p>
+<ul>
+<li>regular text, like 'hello', 'its' or 'me', which should only match that exact text</li>
+<li>wildcards (the <code>.</code> character), which matches any single character.</li>
+<li>optional text, like <code>(town|world|universe)</code>, which matches exactly one of a list of
+strings. So <code>(town|world|universe)</code> matches <code>town</code>, OR <code>world</code>, OR <code>universe</code>.</li>
+</ul>
+<p>These can be mixed and matched in any order (but you will never have one inside the other).
+With this string, you should create a vector of MatcherTokens which refer to the relevant
+parts of that string.</p>
+<p>You will then write a function which takes another string, and sees how much of the <code>Matcher</code>
+that particular string matches. You will return a vector of <code>(MatcherToken, &amp;str)</code>, where the
+<code>MatcherToken</code> is the token that matched some text, and the <code>&amp;str</code> is the text that was matched.</p>
+<h2 id="an-example"><a class="header" href="#an-example">An Example</a></h2>
+<p>Say you had the matcher <code>(Black|Bridge)(rock|stone|water).company</code>. This can be broken down into four parts:</p>
+<ul>
+<li><code>OneOfText([&quot;Black&quot;, &quot;Bridge&quot;])</code></li>
+<li><code>OneOfText([&quot;rock&quot;, &quot;stone&quot;, &quot;water&quot;])</code></li>
+<li><code>Wildcard</code></li>
+<li><code>RawText(&quot;company&quot;)</code></li>
+</ul>
+<p>Now, let's imagine we're given the following text: <code>BlackBridge</code>. <code>Black</code> matches the first token,
+but <code>Bridge</code> does not match the second token.
+So, we would return: <code>vec![(OneOfText([&quot;Black&quot;, &quot;Bridge&quot;]), &quot;Black&quot;)&quot;]</code>. The most tokens we've matched is 1.</p>
+<p>For a different example, take <code>Bridgestone_Tyres</code>.
+<code>Bridge</code> matches the first matcher, <code>stone</code> matches
+the second matcher, <code>_</code> matches the third matcher,
+but <code>Tyres</code> doesn't match <code>company</code>. So the most tokens
+we've matched is 3. We'd return a vec containing:</p>
+<ul>
+<li>(<code>OneOfText([&quot;Black&quot;, &quot;Bridge&quot;])</code>, <code>Bridge</code>)</li>
+<li>(<code>OneOfText([&quot;rock&quot;, &quot;stone&quot;, &quot;water&quot;])</code>, <code>&quot;stone&quot;</code>)</li>
+<li>(<code>Wildcard</code>, <code>&quot;_&quot;</code>)</li>
+</ul>
+<h3 id="a-note-on-unicode"><a class="header" href="#a-note-on-unicode">A Note On Unicode</a></h3>
+<p>Rust is able to deal with unicode characters (like emoji or Japanese Kanji) in its strings.
+Of course, this increases the amount of complexity that is required for simple operations like
+splitting a string into pieces, because it's possible to accidentally split a character in half.</p>
+<p>The tests in the example <em>do not</em> use unicode, however if you want a &quot;true&quot; Rust experience,
+change the tests to include a unicode character (an example is in the comments).</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="further-reading-in-the-rust-reference"><a class="header" href="#further-reading-in-the-rust-reference">Further Reading in the Rust Reference</a></h1>
+<p>The best sources of information about lifetimes are the Rust Reference and
+Rustonomicon. If you require a really advanced knowledge of lifetimes to
+complete a project, the reference will contain that knowledge. Most times,
+however, if you feel you need to understand something complex about lifetimes,
+you may find that there is a simpler alternative.</p>
+<ul>
+<li><a href="https://doc.rust-lang.org/reference/lifetime-elision.html">The Rust Reference (Lifetime Elision)</a></li>
+<li><a href="https://doc.rust-lang.org/reference/">The Rust Reference (In General)</a></li>
+<li><a href="https://doc.rust-lang.org/nomicon/lifetimes.html">The Rustonomicon (Lifetimes)</a></li>
+</ul>
+<h1 id="other-useful-lifetimes-content"><a class="header" href="#other-useful-lifetimes-content">Other Useful Lifetimes Content</a></h1>
+<ul>
+<li><a href="https://github.com/pretzelhammer/rust-blog/blob/master/posts/common-rust-lifetime-misconceptions.md">Common Rust Lifetime Misconceptions</a></li>
+<li><a href="https://www.youtube.com/watch?v=rAl-9HwD858">Crust of Rust: Lifetime Annotations</a></li>
+</ul>
+<h2 id="variance-and-subtyping"><a class="header" href="#variance-and-subtyping">Variance and Subtyping</a></h2>
+<p>This guide does not cover the topic of &quot;variance&quot; at all, which is how lifetimes can be substituted for
+one-another. Variance, while theoretically important, is not useful in a day-to-day understanding
+of lifetimes, and so it was not included in the book.</p>
+<p>You can read more about it in <a href="https://doc.rust-lang.org/nomicon/subtyping.html">the Rustonomicon (subtyping)</a>.</p>
+<h2 id="brain-teaser-1-why-doesnt-this-program-work"><a class="header" href="#brain-teaser-1-why-doesnt-this-program-work">Brain Teaser 1: Why doesn't this program work:</a></h2>
+<p>If you're interested in working through a really difficult exercise to test
+your understanding of lifetimes and generics, the following exercise may be interesting.</p>
+<p>This should be another way of implementing the code in exercise 5.
+Unfortunately, it doesn't work. This took the author of this book
+20 minutes to figure out (after having written five chapters), so he
+challenges you to do better!</p>
+<pre><code class="language-rust ignore">use std::collections::HashSet;
+
+struct Difference&lt;'first, 'second&gt; {
+    first_only: Vec&lt;&amp;'first str&gt;,
+    second_only: Vec&lt;&amp;'second str&gt;
+}
+
+fn find_difference&lt;'fst, 'snd&gt;(sentence1: &amp;'fst str, sentence2: &amp;'snd str) -&gt; Difference&lt;'fst, 'snd&gt; {
+    let sentence_1_words: HashSet&lt;&amp;str&gt; = sentence1.split(&quot; &quot;).collect();
+    let sentence_2_words: HashSet&lt;&amp;str&gt; = sentence2.split(&quot; &quot;).collect();
+
+    Difference {
+        first_only: (&amp;sentence_1_words - &amp;sentence_2_words).into_iter().collect(),
+        second_only: (&amp;sentence_2_words - &amp;sentence_1_words).into_iter().collect(),
+    }
+
+}
+
+fn main() {
+    let first_sentence = String::from(&quot;I love the surf and the sand.&quot;);
+    let second_sentence = String::from(&quot;I hate the surf and the sand.&quot;);
+
+    let first_only = {
+        let third_sentence = String::from(&quot;I hate the snow and the sand.&quot;);
+        let diff = find_difference(&amp;first_sentence, &amp;third_sentence);
+        diff.first_only
+    };
+
+    assert_eq!(first_only, vec![&quot;hate&quot;, &quot;surf&quot;]);
+
+    let second_only = {
+        let third_sentence = String::from(&quot;I hate the snow and the sand.&quot;);
+        let diff = find_difference(&amp;third_sentence, &amp;second_sentence);
+        diff.second_only
+    };
+
+    assert_eq!(second_only, vec![&quot;snow&quot;]);
+}</code></pre>
+<p>For more information about this issue, read <a href="https://github.com/rust-lang/rust/issues/73788">this Rust issue</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="footnote-lifetimes-on-trait-objects"><a class="header" href="#footnote-lifetimes-on-trait-objects">Footnote: Lifetimes on Trait Objects</a></h1>
+<p>In chapter 7, we discussed placeholder lifetimes (<code>'_</code>). We said that
+there were three ways you could use them:</p>
+<ul>
+<li>To simplify <code>impl</code> blocks</li>
+<li>When consuming/returning a type that needs a lifetime</li>
+<li>To write trait objects that contain references.</li>
+</ul>
+<p>In the first case, we saw that anonymous lifetimes just simplified
+what we needed to write.</p>
+<p>In the second case, we saw that Rust recommends that we use it, but
+we don't <em>need</em> to -- lifetime elision will do what we want.</p>
+<p>The one case where it looks like lifetime elision should do what we want,
+but it actually doesn't unless we use the <code>'_</code> is the case of trait objects.
+This chapter walks through how trait objects and lifetimes work together.</p>
+<p>Let's setup a simple example:</p>
+<pre><pre class="playground"><code class="language-rust">trait Bool {
+    fn truthiness(&amp;self) -&gt; bool;
+}
+
+struct True();
+impl Bool for True {
+    fn truthiness(&amp;self) -&gt; bool {
+        true
+    }
+}
+
+struct False();
+impl Bool for False {
+    fn truthiness(&amp;self) -&gt; bool {
+        false
+    }
+}
+
+fn get_bool(b: bool) -&gt; Box&lt;dyn Bool&gt; {
+    if b == true {
+        Box::new(True())
+    } else {
+        Box::new(False())
+    }
+}
+
+fn main() {
+    let my_bool = true;
+    let my_dyn = get_bool(my_bool);
+
+    println!(&quot;{}&quot;, my_dyn.truthiness());
+}</code></pre></pre>
+<p>To be clear, what we are doing here is creating two structs which represent
+<code>true</code> and <code>false</code>. They both implement the <code>Bool</code> trait, which has
+the <code>truthiness</code> function which returns <code>true</code> or <code>false</code>.</p>
+<p>The <code>get_bool</code> function returns a Boxed <code>Bool</code> trait object, based on whether
+<code>get_bool</code> is passed <code>true</code> or  <code>false</code>.</p>
+<p>It's important to realise that since trait objects might or might not contain a
+reference (or any number of references), all trait objects have lifetimes.
+This is true, even if no implementors of the trait contain references.<sup><a name="to-footnote-1"><a href="chapter_10.html#footnote-1">1</a></a></sup></p>
+<p>So, since we need to associate a lifetime with our trait object, we might
+think we could rely on lifetime elision. But how would lifetime elision
+work for our <code>get_bool</code> function? There are no input references, so what
+output lifetime should we give the trait object? Lifetime elision can't help
+us here.</p>
+<p>So, in RFC 599 and in RFC 1156, the rules for trait object lifetimes were changed.
+The rules are complex, and best outlined <a href="https://doc.rust-lang.org/reference/lifetime-elision.html#default-trait-object-lifetimes">in the reference</a>,
+but in the case of <code>get_bool</code>, it means that the lifetime inferred for <code>dyn Bool</code> is
+<code>'static</code>.</p>
+<p>Let's change the example slightly now, such that the struct contains a reference
+to a bool:</p>
+<pre><code class="language-rust ignore">trait Bool {
+    fn truthiness(&amp;self) -&gt; bool;
+}
+
+// CHANGE 1: added &amp;'a bool here
+struct True&lt;'a&gt;(&amp;'a bool);
+impl&lt;'a&gt; Bool for True&lt;'a&gt; {
+    fn truthiness(&amp;self) -&gt; bool {
+        true
+    }
+}
+
+// CHANGE 2: added &amp;'a bool here
+struct False&lt;'a&gt;(&amp;'a bool);
+impl&lt;'a&gt; Bool for False&lt;'a&gt; {
+    fn truthiness(&amp;self) -&gt; bool {
+        false
+    }
+}
+
+fn get_bool(b: &amp;bool) -&gt; Box&lt;dyn Bool&gt; {
+    if *b == true {
+        Box::new(True(b))
+    } else {
+        Box::new(False(b))
+    }
+}
+
+// CHANGE 3: Update the 
+fn main() {
+    let my_dyn = {
+        let my_bool = true;
+        get_bool(&amp;my_bool)
+        // my_bool is dropped here, so the trait object we're returning
+        // has a dangling reference.
+    };
+    println!(&quot;{}&quot;, my_dyn.truthiness());
+}</code></pre>
+<p>Now, we get an error:</p>
+<pre><code>error: lifetime may not live long enough
+  --&gt; src/main.rs:22:5
+   |
+21 |   fn get_bool(b: &amp;bool) -&gt; Box&lt;dyn Bool&gt; {
+   |                  - let's call the lifetime of this reference `'1`
+22 | /     if *b == true {
+23 | |         Box::new(True(b))
+24 | |     } else {
+25 | |         Box::new(False(b))
+26 | |     }
+   | |_____^ returning this value requires that `'1` must outlive `'static`
+   |
+help: to declare that the trait object captures data from argument `b`, you can add an explicit `'_` lifetime bound
+   |
+21 | fn get_bool(b: &amp;bool) -&gt; Box&lt;dyn Bool + '_&gt; {
+   |                                       ++++
+
+error: could not compile __ due to previous error
+
+</code></pre>
+<p>Even though lifetime elision means that <code>get_bool</code> should end up with a
+signature like <code>fn get_bool&lt;'elided&gt;(b: &amp;'elided bool) -&gt; Box&lt;dyn Bool + 'elided&gt;</code>, it doesn't. The special rules for trait objects mean that the
+lifetime is: <code>fn get_bool&lt;'elided&gt;(b: &amp;'elided bool) -&gt; Box&lt;dyn Bool + 'static&gt;</code>. That <code>'static</code> bound is incorrect.</p>
+<p>Therefore, we need the <code>'_</code> bound (as this error message tells us) to inform Rust that it
+should use the normal lifetime elision rules; rather than the special trait
+object rules.</p>
+<p><hr/>
+<p><a name="footnote-1"><a href="chapter_10.html#to-footnote-1">1</a></a>: https://doc.rust-lang.org/reference/types/trait-object.html#trait-object-lifetime-bounds</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

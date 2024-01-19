@@ -1,0 +1,356 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Chapter 7: Special Lifetimes - LifetimeKata</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="chapter_0.html">Chapter 0: Revision</a></li><li class="chapter-item expanded "><a href="chapter_1.html">Chapter 1: Lifetimes Needed</a></li><li class="chapter-item expanded "><a href="chapter_2.html">Chapter 2: Lifetimes Explained</a></li><li class="chapter-item expanded "><a href="chapter_3.html">Chapter 3: Lifetime Elision</a></li><li class="chapter-item expanded "><a href="chapter_4.html">Chapter 4: Mutable References and Containers</a></li><li class="chapter-item expanded "><a href="chapter_5.html">Chapter 5: Lifetimes on Types</a></li><li class="chapter-item expanded "><a href="chapter_6.html">Chapter 6: Lifetimes on Impls</a></li><li class="chapter-item expanded "><a href="chapter_7.html" class="active">Chapter 7: Special Lifetimes</a></li><li class="chapter-item expanded "><a href="chapter_8.html">Chapter 8: Finale</a></li><li class="chapter-item expanded "><a href="chapter_9.html">Chapter 9: Further Reading</a></li><li class="chapter-item expanded "><a href="chapter_10.html">Chapter 10: Footnote on Trait Lifetime Bounds</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">LifetimeKata</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/tfpk/lifetimekata/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="special-lifetimes-and-bounds"><a class="header" href="#special-lifetimes-and-bounds">Special Lifetimes and Bounds</a></h1>
+<p>There are two special lifetimes in Rust. It's worth discussing them both:</p>
+<ul>
+<li><code>'static</code></li>
+<li><code>'_</code> (the implicit lifetime)</li>
+</ul>
+<h1 id="the-static-lifetime"><a class="header" href="#the-static-lifetime">The <code>static</code> lifetime</a></h1>
+<p>Some things in your program are guaranteed to last forever. The most common reason for this
+is when they're information bundled inside your binary. For example, when you write
+a program like this:</p>
+<pre><pre class="playground"><code class="language-rust">fn main() {
+    let my_text = &quot;Hello World&quot;;
+}</code></pre></pre>
+<p>The text <code>&quot;Hello World&quot;</code> is actually somewhere inside the compiled binary. This means that
+the reference to it is always valid, since the text is always there as long as the program
+is running.</p>
+<p>Therefore, if we were to talk about the type of the text, we'd say it's a <code>&amp;'static str</code>.</p>
+<p>Similarly, any references to a constant can also be <code>&amp;'static</code>. For example:</p>
+<pre><pre class="playground"><code class="language-rust">
+const SOME_COORDINATE: (i32, i32) = (7, 4);
+
+fn main() {
+    let static_reference: &amp;'static (i32, i32) = &amp;SOME_COORDINATE;
+}</code></pre></pre>
+<h1 id="the-_-lifetime-anonymous-lifetimes-placeholder-lifetimes"><a class="header" href="#the-_-lifetime-anonymous-lifetimes-placeholder-lifetimes">The <code>'_</code> lifetime (Anonymous Lifetimes, Placeholder Lifetimes)</a></h1>
+<p>The implicit lifetime tells Rust to figure out the lifetime
+itself. There are three places where this lifetime is useful:</p>
+<ul>
+<li>To simplify <code>impl</code> blocks</li>
+<li>When consuming/returning a type that needs a lifetime</li>
+<li>To write trait objects that contain references.</li>
+</ul>
+<h2 id="simplifying-impl-blocks"><a class="header" href="#simplifying-impl-blocks">Simplifying Impl Blocks</a></h2>
+<p>Say you're implementing a counter struct, that looks like this:</p>
+<pre><pre class="playground"><code class="language-rust">struct Counter&lt;'a&gt; {
+    counter: &amp;'a mut i32
+}
+
+impl&lt;'a&gt; Counter&lt;'a&gt; {
+    fn increment(&amp;mut self) {
+        *self.counter += 1;
+    }
+}
+
+fn main() {
+    let mut num = 0;
+    
+    let mut counter = Counter { counter: &amp;mut num };
+    counter.increment();
+    
+    println!(&quot;{num}&quot;); // prints 1
+    
+}</code></pre></pre>
+<p>That's fine, but you'll notice that the <code>impl</code> block doesn't actually use the <code>'a</code> lifetime anywhere.
+Therefore, we can simplify things by writing the following instead:</p>
+<pre><code class="language-rust ignore">impl Counter&lt;'_&gt; {
+    fn increment(&amp;mut self) {
+        self.counter += 1;
+    }
+}</code></pre>
+<p>The two <code>impl</code> blocks above mean the same thing, but just take slightly fewer arguments.</p>
+<h2 id="returning-structs-and-enums"><a class="header" href="#returning-structs-and-enums">Returning Structs and Enums</a></h2>
+<p>This is recommended for the situation where you are returning a
+struct/enum that contains a reference. You could write something like this:</p>
+<pre><pre class="playground"><code class="language-rust">
+struct StrWrap&lt;'a&gt;(&amp;'a str);
+
+fn make_wrapper(string: &amp;str) -&gt; StrWrap {
+    StrWrap(string)
+}
+
+<span class="boring">fn main() {}</span></code></pre></pre>
+<p>But that syntax is no longer recommended, as you will see when you add the
+<code>#![deny(rust_2018_idioms)]</code> annotation, where you get the error:</p>
+<pre><code class="language-text">error: hidden lifetime parameters in types are deprecated
+ --&gt; src/main.rs:8:34
+  |
+_ | fn make_wrapper(string: &amp;str) -&gt; StrWrap {
+  |                                  ^^^^^^^ expected lifetime parameter
+  |
+note: the lint level is defined here
+ --&gt; src/main.rs:1:9
+  |
+_ | #![deny(rust_2018_idioms)]
+  |         ^^^^^^^^^^^^^^^^
+  = note: `#[deny(elided_lifetimes_in_paths)]` implied by `#[deny(rust_2018_idioms)]`
+help: indicate the anonymous lifetime
+  |
+_ | fn make_wrapper(string: &amp;str) -&gt; StrWrap&lt;'_&gt; {
+  |                                         ++++
+</code></pre>
+<p>By following the hint, it becomes clearer that <code>StrWrap</code> <em>does</em> contain a reference,
+but that the compiler should just figure it out.</p>
+<h2 id="lifetimes-on-trait-objects"><a class="header" href="#lifetimes-on-trait-objects">Lifetimes on Trait Objects</a></h2>
+<p>See <a href="./chapter_10.html">Chapter 10: Footnote on Trait Lifetime Bounds</a> for the gory details.</p>
+<h1 id="lifetime-bounds"><a class="header" href="#lifetime-bounds">Lifetime Bounds</a></h1>
+<p>Lifetime bounds are not widely used, so we don't devote a large section of these exercises to them.
+You can probably skip this section unless you really want to know the details.</p>
+<p>In short, they allow you to specify that one lifetime should outlive another. To specify one, use a where clause, such as 
+<code>where 'a: 'b</code>.</p>
+<p>To quote the Rust Reference: </p>
+<blockquote>
+<p>Lifetime bounds can be applied to types or to other lifetimes.
+The bound <code>'a: 'b</code> is usually read as <code>'a</code> <em>outlives</em> <code>'b</code>.
+<code>'a: 'b</code> means that <code>'a</code> lasts at least as long as <code>'b</code>, so a reference <code>&amp;'a ()</code> is valid whenever <code>&amp;'b ()</code> is valid.</p>
+</blockquote>
+<blockquote>
+<pre><code class="language-rust ignore">fn f&lt;'a, 'b&gt;(x: &amp;'a i32, mut y: &amp;'b i32) where 'a: 'b {
+    y = x;                      // &amp;'a i32 is a subtype of &amp;'b i32 because 'a: 'b
+    let r: &amp;'b &amp;'a i32 = &amp;&amp;0;   // &amp;'b &amp;'a i32 is well formed because 'a: 'b
+}</code></pre>
+</blockquote>
+<blockquote>
+<p><code>T: 'a</code> means that all lifetime parameters of <code>T</code> outlive <code>'a</code>.
+For example, if <code>'a</code> is an unconstrained lifetime parameter, then <code>i32: 'static</code> and <code>&amp;'static str: 'a</code> are satisfied, but <code>Vec&lt;&amp;'a ()&gt;: 'static</code> is not.</p>
+</blockquote>
+<h1 id="exercise"><a class="header" href="#exercise">Exercise</a></h1>
+<p>You have been given code which contains many uses of the lifetimes <code>'a</code> and <code>'b'</code>.
+All of these lifetimes can be replaced with either <code>'_</code> or <code>'static</code>.</p>
+<p>Your task is to replace every occurance of the lifetimes <code>'a</code> and <code>'b</code> with either
+<code>'_</code> or <code>'static</code>, to remove excessive lifetime declarations, and to ensure your 
+code still compiles.</p>
+<h3 id="footnote-on-out-of-date-information"><a class="header" href="#footnote-on-out-of-date-information">Footnote on Out of Date Information</a></h3>
+<p>The Rust Edition Guide previously contained a section
+about anonymous lifetimes. The most popular google result
+is now <a href="https://yegeun542.github.io/rust-edition-guide-ko/rust-2018/ownership-and-lifetimes/the-anonymous-lifetime.html">this article</a> but I recommend disregarding it, as it is out of date information.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter_6.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="chapter_8.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter_6.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="chapter_8.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
