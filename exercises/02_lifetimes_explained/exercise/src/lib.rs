@@ -11,7 +11,7 @@ use require_lifetimes::require_lifetimes;
 /// assert_eq!(identity(&x), &x);
 /// ````
 #[require_lifetimes(!)]
-pub fn identity(number: &i32) -> &i32 {
+pub fn identity<'a>(number: &'a i32) -> &'a i32 {
     number
 }
 
@@ -47,7 +47,7 @@ pub fn identity(number: &i32) -> &i32 {
 /// assert_eq!(splitted, vec!["this", "is", "a", "test"]);
 /// ```
 #[require_lifetimes(!)]
-pub fn split(text: &str, delimiter: &str) -> Vec<&str> {
+pub fn split<'a, 'b>(text: &'a str, delimiter: &'b str) -> Vec<&'a str> {
     let mut last_split = 0;
     let mut matches: Vec<&str> = vec![];
     for i in 0..text.len() {
@@ -120,7 +120,7 @@ pub fn split(text: &str, delimiter: &str) -> Vec<&str> {
 /// assert_eq!(&num, answer);
 /// ```
 #[require_lifetimes(!)]
-pub fn only_if_greater_hard(number: &i32, greater_than: &i32, otherwise: &i32) -> &i32 {
+pub fn only_if_greater_hard<'a,'b>(number: &'a i32, greater_than: &'b i32, otherwise: &'a i32) -> &'a i32 {
     if number > greater_than {
         number
     } else {
